@@ -1,8 +1,14 @@
 import {
+  Avatar,
   Box,
+  Divider,
   IconButton,
+  ListItemIcon,
+  Menu,
+  MenuItem,
   Stack,
   Toolbar,
+  Tooltip,
   Typography,
   useTheme,
 } from "@mui/material";
@@ -15,10 +21,14 @@ import InputBase from "@mui/material/InputBase";
 import {
   DarkModeOutlined,
   LightModeOutlined,
+  Logout,
   NotificationAddOutlined,
   Person2Outlined,
+  PersonAdd,
+  Settings,
   SettingsOutlined,
 } from "@mui/icons-material";
+import { Link, useNavigate } from "react-router-dom";
 const drawerWidth = 240;
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
@@ -79,6 +89,15 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
 
 function TopBar({ open, handleDrawerOpen, setMode }) {
   const theme = useTheme();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const navigate = useNavigate();
+  const openMenu = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   return (
     <AppBar position="fixed" open={open}>
       <Toolbar>
@@ -128,15 +147,77 @@ function TopBar({ open, handleDrawerOpen, setMode }) {
             </IconButton>
           )}
 
-          <IconButton color="inherit">
-            <NotificationAddOutlined />
-          </IconButton>
-          <IconButton color="inherit">
-            <SettingsOutlined />
-          </IconButton>
-          <IconButton color="inherit">
-            <Person2Outlined />
-          </IconButton>
+          <Tooltip title="Account settings">
+            <IconButton
+              onClick={handleClick}
+              size="small"
+              sx={{ ml: 2, color: "inherit" }}
+              aria-controls={open ? "account-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+            >
+              <Person2Outlined />
+            </IconButton>
+          </Tooltip>
+          <Menu
+            anchorEl={anchorEl}
+            id="account-menu"
+            open={openMenu}
+            onClose={handleClose}
+            onClick={handleClose}
+            PaperProps={{
+              elevation: 0,
+              sx: {
+                overflow: "visible",
+                filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                mt: 1.5,
+                "& .MuiAvatar-root": {
+                  width: 32,
+                  height: 32,
+                  ml: -0.5,
+                  mr: 1,
+                },
+                "&:before": {
+                  content: '""',
+                  display: "block",
+                  position: "absolute",
+                  top: 0,
+                  right: 14,
+                  width: 10,
+                  height: 10,
+                  bgcolor: "background.paper",
+                  transform: "translateY(-50%) rotate(45deg)",
+                  zIndex: 0,
+                },
+              },
+            }}
+            transformOrigin={{ horizontal: "right", vertical: "top" }}
+            anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+          >
+            <Link
+              to="profile"
+              style={{
+                color: "inherit",
+              }}
+            >
+              <MenuItem onClick={handleClose}>
+                <Avatar /> Profile
+              </MenuItem>
+            </Link>
+            <Divider />
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                localStorage.removeItem("token");
+                navigate("/login");
+              }}
+            >
+              <ListItemIcon>
+                <Logout fontSize="small" />
+              </ListItemIcon>
+              Logout
+            </MenuItem>
+          </Menu>
         </Stack>
       </Toolbar>
     </AppBar>

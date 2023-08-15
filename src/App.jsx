@@ -11,7 +11,7 @@ import Typography from "@mui/material/Typography";
 import SideBar from "./Components/SideBar";
 import TopBar from "./Components/TopBar";
 import { getDesignTokens } from "./theme";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -43,23 +43,28 @@ export default function App() {
     setOpen(false);
   };
   const theme = React.useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
-
+  const location = useLocation();
   return (
-    <ThemeProvider theme={theme}>
-      <Box sx={{ display: "flex" }}>
-        <CssBaseline />
-        <TopBar
-          open={open}
-          handleDrawerOpen={handleDrawerOpen}
-          setMode={setMode}
-        />
-        <SideBar open={open} handleDrawerClose={handleDrawerClose} />
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-          <DrawerHeader />
-          <Outlet />
-        </Box>
-      </Box>
+    <>
+      <ThemeProvider theme={theme}>
+        {location.pathname !== "/login" && (
+          <Box sx={{ display: "flex" }}>
+            <CssBaseline />
+            <TopBar
+              open={open}
+              handleDrawerOpen={handleDrawerOpen}
+              setMode={setMode}
+            />
+            <SideBar open={open} handleDrawerClose={handleDrawerClose} />
+            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+              <DrawerHeader />
+              <Outlet />
+            </Box>
+          </Box>
+        )}
+      </ThemeProvider>
+      {location.pathname === "/login" && <Outlet />}
       <div className="mouseTracker" ref={cursorRef}></div>
-    </ThemeProvider>
+    </>
   );
 }

@@ -21,6 +21,8 @@ import ProfileForm from "./Pages/profileForm/ProfileForm.jsx";
 import Invoices from "./Pages/invoices/Invoices.jsx";
 import Contacts from "./Pages/contacts/Contacts.jsx";
 import UserDetails from "./Pages/userDetails/index.jsx";
+import Profile from "./Pages/Profile/index.jsx";
+import Login from "./Pages/Login/index.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -28,6 +30,8 @@ const router = createBrowserRouter(
       <Route index element={<DashboardPage />} />
       <Route path="team" element={<Team />} />
       <Route path="team/:id" element={<UserDetails />} />
+      <Route path="profile" element={<Profile />} />
+      <Route path="login" element={<Login />} />
       <Route path="contacts" element={<Contacts />} />
       <Route path="invoices" element={<Invoices />} />
       <Route path="form" element={<ProfileForm />} />
