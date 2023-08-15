@@ -1,0 +1,41 @@
+@import url("https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@300;400;700&display=swap");
+
+* {
+  font-family: "Merriweather Sans", sans-serif;
+}
+body {
+  height: 100vh;
+}
+.mouseTracker {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200px;
+  height: 200px;
+  background-color: #fff;
+  border-radius: 50%;
+  filter: blur(250px);
+  transform: translate(-50%, -50%) scale(0.35);
+  transition: transform 0.3;
+  pointer-events: none;
+  z-index: 63333333333333324;
+}
+
+div {
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #a09f9f;
+    border-radius: 5px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+  }
+}
