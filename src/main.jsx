@@ -21,8 +21,13 @@ import ProfileForm from "./Pages/profileForm/ProfileForm.jsx";
 import Invoices from "./Pages/invoices/Invoices.jsx";
 import Contacts from "./Pages/contacts/Contacts.jsx";
 import UserDetails from "./Pages/userDetails/index.jsx";
+
 import Profile from "./Pages/Profile/index.jsx";
 import Login from "./Pages/Login/index.jsx";
+
+import { Provider } from "react-redux";
+import store from './store/store';
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -46,5 +51,7 @@ const router = createBrowserRouter(
 );
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <RouterProvider router={router} />
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
 );
