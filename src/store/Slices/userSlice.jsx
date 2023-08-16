@@ -2,10 +2,9 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import LukeApp from "../../Api/config";
 
 
-export const fetchUser = createAsyncThunk("user/profile", async () => {
-  const { data } = await LukeApp.get(`user/profile`);
-  console.log(data)
-  return data;
+export const fetchUser = createAsyncThunk("user/fetchUser", async (userId) => {
+  const { data } = await LukeApp.get(`user/${userId}`);
+  return data.user;
 });
 
 // export const addFavorite = createAsyncThunk(
@@ -44,17 +43,16 @@ const initialState = {
   },
   loading: false,
   error: null,
-  socket: null,
-  unseen: [],
-  notificationsNo: null,
-  onlineUsers: [],
+  Allusers:[]
 };
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
- 
+    addAllUsers: (state, action) => {
+      state.Allusers =  action.payload ;
+    },
   },
   extraReducers: {
     [fetchUser.fulfilled]: (state, action) => {
@@ -76,18 +74,19 @@ const userSlice = createSlice({
   },
 });
 
-// export const {
-//   addInfo,
-//   // ResetRedux,
-//   // setSocket,
-//   // setUnseen,
-//   // addUnseen,
-//   // removeUnseen,
-//   // resetUnseen,
-//   // addOnlineUser,
-//   // setUserProfileImage,
-//   // setNotificationsNo,
-//   // addNotificationsNo,
-//   // resetNotificationsNo,
-// } = userSlice.actions;
+export const {
+  addInfo,
+  // ResetRedux,
+  // setSocket,
+  // setUnseen,
+  // addUnseen,
+  // removeUnseen,
+  // resetUnseen,
+  // addOnlineUser,
+  // setUserProfileImage,
+  // setNotificationsNo,
+  // addNotificationsNo,
+  // resetNotificationsNo,
+  addAllUsers
+} = userSlice.actions;
 export default userSlice.reducer;
