@@ -6,11 +6,15 @@ import { useForm } from "react-hook-form";
 import LukeApp from "../../Api/config";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate } from "react-router-dom";
+import { fetchUser } from "../../store/Slices/userSlice";
+import { useDispatch } from "react-redux";
+import  jwt_decode  from 'jwt-decode';
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -23,11 +27,13 @@ function Login() {
     try {
       const { data } = await LukeApp.post("/login", formData);
       localStorage.setItem("token", data.token);
+      const decodedToken = jwt_decode(data.token);
+      dispatch(fetchUser(decodedToken.userId));
       navigate("/");
     } catch (error) {
       console.log(error);
     } finally {
-      setLoading(false);
+      setLoading(false); 
     }
   };
 

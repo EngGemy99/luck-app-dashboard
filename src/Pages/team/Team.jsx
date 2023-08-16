@@ -4,9 +4,15 @@ import { DataGrid } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import LukeApp from "../../Api/config";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { addAllUsers } from "../../store/Slices/userSlice";
 // import { columns } from "./data";
 function Team() {
   const theme = useTheme();
+  const dispatch = useDispatch();
+  const Allusers = useSelector((state) => {
+    return state.user?.Allusers;
+  });
 
   const columns = [
     {
@@ -96,15 +102,17 @@ function Team() {
   const [rows, setRows] = useState([]);
   const getAllUsers = async () => {
     const { data } = await LukeApp.get(`admin`);
-    setRows(data.users);
+    dispatch(addAllUsers(data.users))
   };
   useEffect(() => {
-    getAllUsers();
+    if (Allusers.length == 0 ) {
+      getAllUsers();
+    }
   }, []);
 
   return (
     <Box sx={{ height: 650, width: "98%" }}>
-      <DataGrid rows={rows} columns={columns} />
+      <DataGrid rows={Allusers} columns={columns} />
     </Box>
   );
 }

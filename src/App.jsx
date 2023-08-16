@@ -12,7 +12,7 @@ import SideBar from "./Components/SideBar";
 import TopBar from "./Components/TopBar";
 import { getDesignTokens } from "./theme";
 import { Outlet, useLocation } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchUser } from "./store/Slices/userSlice";
 import { useEffect } from "react";
 
@@ -28,7 +28,11 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 export default function App() {
   const [open, setOpen] = React.useState(false);
   const cursorRef = React.useRef(null);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
+  const user = useSelector((state) => {
+    return state.user?.user;
+  });
+
   const [mode, setMode] = React.useState(
     localStorage.getItem("currentMode") || "light"
   );
@@ -52,11 +56,11 @@ export default function App() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      // const decodedToken = jwt_decode(token);
-      // const userId = decodedToken.userId;
-      dispatch(fetchUser());
+      const decodedToken = jwt_decode(token);
+      const userId = decodedToken.userId;
+      dispatch(fetchUser(userId));
     }
-  }, []);
+  }, [dispatch, user._id]);
 
   return (
     <>

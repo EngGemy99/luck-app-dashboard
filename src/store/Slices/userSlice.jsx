@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import LukeApp from "../../Api/config";
 
-export const fetchUser = createAsyncThunk("user/profile", async () => {
-  const { data } = await LukeApp.get(`user/profile`);
-  return data;
+
+export const fetchUser = createAsyncThunk("user/fetchUser", async (userId) => {
+  const { data } = await LukeApp.get(`user/${userId}`);
+  return data.user;
 });
 
 // export const addFavorite = createAsyncThunk(
@@ -42,48 +43,29 @@ const initialState = {
   },
   loading: false,
   error: null,
-  socket: null,
-  unseen: [],
-  notificationsNo: null,
-  onlineUsers: [],
+  Allusers:[]
 };
 
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    addAllUsers: (state, action) => {
+      state.Allusers =  action.payload ;
+    },
+  },
   extraReducers: {
     [fetchUser.fulfilled]: (state, action) => {
       state.loading = false;
       state.user = { ...action.payload };
     },
-    // [addFavorite.fulfilled]: (state, action) => {
-    //   state.user.favourites.push(action.payload);
-    //   toastMessage("success", "Added Successfully 👏");
-    // },
 
-    // [deleteFavorite.fulfilled]: (state, action) => {
-    //   var index = state.user.favourites.findIndex(function (item) {
-    //     return item._id === action.payload._id;
-    //   });
-    //   state.user.favourites.splice(index, 1);
-    //   // toastMessage("success", "Delete Successfully 👏");
-    // },
   },
 });
 
-// export const {
-//   addInfo,
-//   // ResetRedux,
-//   // setSocket,
-//   // setUnseen,
-//   // addUnseen,
-//   // removeUnseen,
-//   // resetUnseen,
-//   // addOnlineUser,
-//   // setUserProfileImage,
-//   // setNotificationsNo,
-//   // addNotificationsNo,
-//   // resetNotificationsNo,
-// } = userSlice.actions;
+export const {
+  addInfo,
+
+  addAllUsers
+} = userSlice.actions;
 export default userSlice.reducer;
