@@ -17,7 +17,7 @@ import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "./schema";
-function TopOffers() {
+function Payments() {
   function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
     return (
@@ -48,13 +48,10 @@ function TopOffers() {
       "aria-controls": `simple-tabpanel-${index}`,
     };
   }
-
   const [value, setValue] = React.useState(0);
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
   const {
     register,
     handleSubmit,
@@ -72,8 +69,8 @@ function TopOffers() {
         onChange={handleChange}
         aria-label="basic tabs example"
       >
-        <Tab label="All Top Offers" {...a11yProps(0)} />
-        <Tab label="Add Top Offer" {...a11yProps(1)} />
+        <Tab label="All Payment way" {...a11yProps(0)} />
+        <Tab label="Add Payment way" {...a11yProps(1)} />
       </Tabs>
       <CustomTabPanel value={value} index={0}>
         <Grid container spacing={2}>
@@ -204,36 +201,12 @@ function TopOffers() {
         >
           <form onSubmit={handleSubmit(onSubmit)}>
             <TextField
-              label="title"
-              error={errors.title}
-              helperText={errors.title?.message}
-              {...register("title")}
+              label="payment Name"
+              error={errors.paymentName}
+              helperText={errors.paymentName?.message}
+              {...register("paymentName")}
               fullWidth
               variant="outlined"
-              sx={{
-                mb: 3,
-              }}
-            />
-            <br />
-            <TextField
-              label="description"
-              error={errors.description}
-              helperText={errors.description?.message}
-              {...register("description")}
-              variant="outlined"
-              fullWidth
-              sx={{
-                mb: 3,
-              }}
-            />
-            <br />
-            <TextField
-              error={errors.url}
-              helperText={errors.url?.message}
-              {...register("url")}
-              label="url"
-              variant="outlined"
-              fullWidth
               sx={{
                 mb: 3,
               }}
@@ -241,6 +214,9 @@ function TopOffers() {
             <br />
             <TextField
               type="file"
+              error={errors.image}
+              helperText={errors.image?.message}
+              {...register("image")}
               variant="outlined"
               fullWidth
               sx={{
@@ -265,4 +241,4 @@ function TopOffers() {
   );
 }
 
-export default TopOffers;
+export default Payments;

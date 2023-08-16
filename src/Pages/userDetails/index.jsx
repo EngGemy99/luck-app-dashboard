@@ -19,12 +19,12 @@ import LukeApp from "../../Api/config";
 import { editAllUsers, editStatus } from "../../store/Slices/userSlice";
 function UserDetails() {
   const { id } = useParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const user = useSelector((state) => {
     return state.user?.Allusers?.find((value) => value._id == id);
   });
   const [status, setStatus] = useState(user?.status);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const handleStatus = (statusReverse) => {
     Swal.fire({
@@ -33,10 +33,10 @@ function UserDetails() {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Yes",
     }).then((result) => {
       if (result.isConfirmed) {
-        blockUser(statusReverse)
+        blockUser(statusReverse);
         Swal.fire("Deleted!", "Your file has been deleted.", "success");
       }
     });
@@ -44,31 +44,24 @@ function UserDetails() {
 
   const deleteUser = async () => {
     try {
-
       await LukeApp.delete(`/admin/${user._id}/delete`);
-      dispatch(editAllUsers(id))
-      navigate(-1)
-
-    }
-    catch (error) {
-      console.log(error)
+      dispatch(editAllUsers(id));
+      navigate(-1);
+    } catch (error) {
+      console.log(error);
     }
   };
   const blockUser = async (statusReverse) => {
     try {
-
       await LukeApp.patch(`/admin/${user._id}/edit-status`, {
-        "status":statusReverse
+        status: statusReverse,
       });
-      dispatch(editStatus(id))
-      if(status =='blocked')
-      {
-        setStatus('active')
-      }else setStatus('blocked')
-
-    }
-    catch (error) {
-      console.log(error)
+      dispatch(editStatus(id));
+      if (status == "blocked") {
+        setStatus("active");
+      } else setStatus("blocked");
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -115,6 +108,7 @@ function UserDetails() {
         >
           <form>
             <TextField
+              label="User Name"
               fullWidth
               variant="outlined"
               disabled
@@ -124,6 +118,7 @@ function UserDetails() {
               }}
             />
             <TextField
+              label="email"
               fullWidth
               variant="outlined"
               disabled
@@ -133,6 +128,7 @@ function UserDetails() {
               }}
             />
             <TextField
+              label="points"
               fullWidth
               variant="outlined"
               disabled
@@ -155,16 +151,18 @@ function UserDetails() {
                 >
                   delete user
                 </Button>
-                {
-                  status == "active" ? <Button
+                {status == "active" ? (
+                  <Button
                     variant="contained"
                     color="error"
                     onClick={() => {
-                      handleStatus("blocked")
+                      handleStatus("blocked");
                     }}
                   >
                     Block user
-                  </Button> : <Button
+                  </Button>
+                ) : (
+                  <Button
                     variant="contained"
                     color="success"
                     onClick={() => {
@@ -173,9 +171,7 @@ function UserDetails() {
                   >
                     active user
                   </Button>
-                }
-
-
+                )}
               </Box>
             </Stack>
           </form>

@@ -16,6 +16,7 @@ import Tab from "@mui/material/Tab";
 import PropTypes from "prop-types";
 import LukeApp from "../../Api/config";
 import { DataGrid } from "@mui/x-data-grid";
+import { PendingColumns, AcceptedColumns, RejectedColumns } from "./data";
 function Requests() {
   const [rows, setRows] = useState([]);
   const getAllRequest = async () => {
@@ -26,85 +27,6 @@ function Requests() {
     getAllRequest();
   }, []);
 
-  console.log(rows);
-  const columns = [
-    {
-      field: "user.username",
-      headerName: "User Name",
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-      valueGetter: (params) => params.row?.user?.userName,
-    },
-    {
-      field: "paymentName",
-      headerName: "Payment Name",
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-    },
-    {
-      field: "paymentWay",
-      headerName: "Payment Way",
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-      valueGetter: (params) => {
-        const isEmail = params.row?.email?.includes("@");
-        if (isEmail) {
-          return params.row.email;
-        } else {
-          return params.row.phone;
-        }
-      },
-    },
-    {
-      field: "countPoint",
-      headerName: "Count Point",
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-    },
-    {
-      field: "requestedAt",
-      headerName: "Date",
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-      valueGetter: (params) => {
-        const dateObject = new Date(params.row.requestedAt);
-        const readableDate = `${
-          dateObject.getMonth() + 1
-        }/${dateObject.getDate()}/${dateObject.getFullYear()}`;
-        return readableDate;
-      },
-    },
-    {
-      field: "Action",
-      headerName: "Action",
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-      renderCell: ({ row: { status } }) => {
-        return (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-evenly",
-              alignItems: "center",
-            }}
-          >
-            <Button variant="contained" color="success">
-              Accept
-            </Button>
-            <Button variant="contained" color="error">
-              Reject
-            </Button>
-          </Box>
-        );
-      },
-    },
-  ];
   function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
     return (
@@ -162,7 +84,7 @@ function Requests() {
             <DataGrid
               getRowId={(row) => row._id}
               rows={rows}
-              columns={columns}
+              columns={PendingColumns}
             />
           </Box>
         </Paper>
@@ -177,7 +99,7 @@ function Requests() {
             <DataGrid
               getRowId={(row) => row._id}
               rows={rows}
-              columns={columns}
+              columns={AcceptedColumns}
             />
           </Box>
         </Paper>
@@ -192,7 +114,7 @@ function Requests() {
             <DataGrid
               getRowId={(row) => row._id}
               rows={rows}
-              columns={columns}
+              columns={RejectedColumns}
             />
           </Box>
         </Paper>
