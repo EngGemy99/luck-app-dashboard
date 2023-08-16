@@ -30,6 +30,7 @@ import store from "./store/store";
 import OffersWall from "./Pages/OffersWall/index.jsx";
 import TopOffers from "./Pages/TopOffers/index.jsx";
 import Requests from "./Pages/Requests/index.jsx";
+import Payments from "./Pages/Payments/index.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -42,6 +43,7 @@ const router = createBrowserRouter(
       <Route path="offers-wall" element={<OffersWall />} />
       <Route path="requests" element={<Requests />} />
       <Route path="top-offers" element={<TopOffers />} />
+      <Route path="payment" element={<Payments />} />
       <Route path="contacts" element={<Contacts />} />
       <Route path="invoices" element={<Invoices />} />
       <Route path="form" element={<ProfileForm />} />

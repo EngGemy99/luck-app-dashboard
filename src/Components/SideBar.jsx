@@ -21,12 +21,14 @@ import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
-import { Avatar, Typography } from "@mui/material";
+import { Avatar, Typography, useMediaQuery } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { useNavigate, useLocation } from "react-router-dom";
 import BlurLinearIcon from "@mui/icons-material/BlurLinear";
 import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+
 import pic from "../assets/pic.jpg";
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
@@ -93,9 +95,8 @@ const ListOne = [
     path: "/top-offers",
   },
 ];
-
 const ListTwo = [
-  { text: "Profile Form", icon: <PersonOutlinedIcon />, path: "/form" },
+  { text: "Payments", icon: <AttachMoneyIcon />, path: "/payment" },
   { text: "Calendar", icon: <CalendarTodayOutlinedIcon />, path: "/calendar" },
   {
     text: "FAQ Page",
@@ -114,6 +115,12 @@ function SideBar({ open, handleDrawerClose }) {
   const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
+  const matches = useMediaQuery(theme.breakpoints.down("md")); // 'md' is 960px
+  React.useEffect(() => {
+    if (matches && open) {
+      handleDrawerClose();
+    }
+  }, [matches]);
 
   return (
     <Drawer variant="permanent" open={open}>

@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import LukeApp from "../../Api/config";
 import { DataGrid } from "@mui/x-data-grid";
 import { useSelector } from "react-redux";
+import { PendingColumns, AcceptedColumns, RejectedColumns } from "./data";
 function Requests() {
   const requests = useSelector((state) => {
     return state.user?.requests;
@@ -100,6 +101,7 @@ function Requests() {
       },
     },
   ];
+
   function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
     return (
@@ -158,6 +160,7 @@ function Requests() {
               getRowId={(row) => row._id}
               rows={requests.filter(value=>value.status=="pending")}
               columns={columns}
+
             />
           </Box>
         </Paper>
@@ -173,6 +176,7 @@ function Requests() {
               getRowId={(row) => row._id}
               rows={requests.filter(value=>value.status=="accepted")}
               columns={columns}
+
             />
           </Box>
         </Paper>
