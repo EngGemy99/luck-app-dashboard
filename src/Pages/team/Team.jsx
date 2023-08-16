@@ -92,7 +92,14 @@ function Team() {
             }}
           >
             <Button variant="contained">
-              <Link to={`/team/${_id}`}>View</Link>
+              <Link
+                to={`/team/${_id}`}
+                style={{
+                  color: "#fff",
+                }}
+              >
+                View
+              </Link>
             </Button>
           </Box>
         );
@@ -102,10 +109,10 @@ function Team() {
   const [rows, setRows] = useState([]);
   const getAllUsers = async () => {
     const { data } = await LukeApp.get(`admin`);
-    dispatch(addAllUsers(data.users))
+    dispatch(addAllUsers(data.users));
   };
   useEffect(() => {
-    if (Allusers.length == 0 ) {
+    if (Allusers.length == 0) {
       getAllUsers();
     }
   }, []);
