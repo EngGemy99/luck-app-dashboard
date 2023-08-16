@@ -16,16 +16,91 @@ import Tab from "@mui/material/Tab";
 import PropTypes from "prop-types";
 import LukeApp from "../../Api/config";
 import { DataGrid } from "@mui/x-data-grid";
+import { useSelector } from "react-redux";
 import { PendingColumns, AcceptedColumns, RejectedColumns } from "./data";
 function Requests() {
-  const [rows, setRows] = useState([]);
-  const getAllRequest = async () => {
-    const { data } = await LukeApp.get(`request?status=pending`);
-    setRows(data.requests);
-  };
-  useEffect(() => {
-    getAllRequest();
-  }, []);
+  const requests = useSelector((state) => {
+    return state.user?.requests;
+  });
+
+  const columns = [
+    {
+      field: "user.username",
+      headerName: "User Name",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      valueGetter: (params) => params.row?.user?.userName,
+    },
+    {
+      field: "paymentName",
+      headerName: "Payment Name",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "paymentWay",
+      headerName: "Payment Way",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      valueGetter: (params) => {
+        const isEmail = params.row?.email?.includes("@");
+        if (isEmail) {
+          return params.row.email;
+        } else {
+          return params.row.phone;
+        }
+      },
+    },
+    {
+      field: "countPoint",
+      headerName: "Count Point",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "requestedAt",
+      headerName: "Date",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      valueGetter: (params) => {
+        const dateObject = new Date(params.row.requestedAt);
+        const readableDate = `${
+          dateObject.getMonth() + 1
+        }/${dateObject.getDate()}/${dateObject.getFullYear()}`;
+        return readableDate;
+      },
+    },
+    {
+      field: "Action",
+      headerName: "Action",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      renderCell: ({ row: { status } }) => {
+        return (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-evenly",
+              alignItems: "center",
+            }}
+          >
+            <Button variant="contained" color="success">
+              Accept
+            </Button>
+            <Button variant="contained" color="error">
+              Reject
+            </Button>
+          </Box>
+        );
+      },
+    },
+  ];
 
   function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -83,8 +158,9 @@ function Requests() {
           <Box sx={{ height: 650, width: "98%" }}>
             <DataGrid
               getRowId={(row) => row._id}
-              rows={rows}
-              columns={PendingColumns}
+              rows={requests.filter(value=>value.status=="pending")}
+              columns={columns}
+
             />
           </Box>
         </Paper>
@@ -98,8 +174,9 @@ function Requests() {
           <Box sx={{ height: 650, width: "98%" }}>
             <DataGrid
               getRowId={(row) => row._id}
-              rows={rows}
-              columns={AcceptedColumns}
+              rows={requests.filter(value=>value.status=="accepted")}
+              columns={columns}
+
             />
           </Box>
         </Paper>
@@ -113,8 +190,8 @@ function Requests() {
           <Box sx={{ height: 650, width: "98%" }}>
             <DataGrid
               getRowId={(row) => row._id}
-              rows={rows}
-              columns={RejectedColumns}
+              rows={requests.filter(value=>value.status=="rejected")}
+              columns={columns}
             />
           </Box>
         </Paper>

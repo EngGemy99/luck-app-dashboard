@@ -10,6 +10,10 @@ export const addAllUsers = createAsyncThunk("user/addAllUsers", async () => {
   const { data } = await LukeApp.get(`admin`);
   return data.users;
 });
+export const getRequests = createAsyncThunk("user/Requests", async () => {
+  const { data } = await LukeApp.get(`request`);
+  return data.requests;
+});
 
 // export const addFavorite = createAsyncThunk(
 //   "user/addFavorite",
@@ -47,7 +51,8 @@ const initialState = {
   },
   loading: false,
   error: null,
-  Allusers:[]
+  Allusers:[],
+  requests:[]
 };
 
 const userSlice = createSlice({
@@ -85,6 +90,10 @@ const userSlice = createSlice({
     [addAllUsers.fulfilled]: (state, action) => {
       state.loading = false;
       state.Allusers =  action.payload ;
+    },
+    [getRequests.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.requests =  action.payload ;
     },
 
   },
