@@ -6,13 +6,20 @@ import {
   Divider,
   Grid,
   Paper,
+  TextField,
   Typography,
+  Button,
 } from "@mui/material";
 import React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import PropTypes from "prop-types";
+import { schema } from "./schema";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 function Profile() {
+  const [username, setUsername] = React.useState("");
+  const [image, setImage] = React.useState("");
   function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
     return (
@@ -32,6 +39,16 @@ function Profile() {
     );
   }
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+  const onSubmit = (data) => {
+    handleClick();
+  };
   CustomTabPanel.propTypes = {
     children: PropTypes.node,
     index: PropTypes.number.isRequired,
@@ -51,7 +68,7 @@ function Profile() {
   };
   return (
     <Grid container spacing={2}>
-      <Grid item xs={4}>
+      <Grid item xs={12} md={4}>
         <Card
           sx={{
             py: "2rem",
@@ -80,7 +97,7 @@ function Profile() {
           </CardContent>
         </Card>
       </Grid>
-      <Grid item xs={8}>
+      <Grid item xs={12} md={8}>
         <Tabs
           value={value}
           onChange={handleChange}
@@ -90,10 +107,73 @@ function Profile() {
           <Tab label="Change Password" {...a11yProps(1)} />
         </Tabs>
         <CustomTabPanel value={value} index={0}>
-          <Paper></Paper>
+          <Paper
+            sx={{
+              p: 4,
+            }}
+          >
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <TextField
+                error={errors.userName}
+                helperText={errors.userName?.message}
+                {...register("userName")}
+                label="Username"
+                fullWidth
+                variant="outlined"
+                onChange={(e) => setUsername(e.target.value)}
+                sx={{
+                  mb: 3,
+                }}
+              />
+              <br />
+              <TextField
+                type="file"
+                variant="outlined"
+                fullWidth
+                onChange={(e) => setImage(e.target.value)}
+                sx={{
+                  mb: 3,
+                }}
+              />
+              <br />
+              <Button variant="contained" color="primary" type="submit">
+                Change Details
+              </Button>
+            </form>
+          </Paper>
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
-          Item Two
+          <Paper
+            sx={{
+              p: 4,
+            }}
+          >
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <TextField
+                label="new password"
+                fullWidth
+                variant="outlined"
+                onChange={(e) => setUsername(e.target.value)}
+                sx={{
+                  mb: 3,
+                }}
+              />
+              <br />
+              <TextField
+                label="confirm password"
+                variant="outlined"
+                fullWidth
+                onChange={(e) => setImage(e.target.value)}
+                sx={{
+                  mb: 3,
+                }}
+              />
+              <br />
+              <Button variant="contained" color="primary" type="submit">
+                Change Password
+              </Button>
+            </form>
+          </Paper>
         </CustomTabPanel>
       </Grid>
     </Grid>

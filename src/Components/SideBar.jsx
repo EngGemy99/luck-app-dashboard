@@ -24,6 +24,9 @@ import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import { Avatar, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { useNavigate, useLocation } from "react-router-dom";
+import BlurLinearIcon from "@mui/icons-material/BlurLinear";
+import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import pic from "../assets/pic.jpg";
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
@@ -75,14 +78,19 @@ const ListOne = [
   { text: "Dashboard", icon: <HomeOutlinedIcon />, path: "/" },
   { text: "All Users", icon: <PeopleOutlinedIcon />, path: "/team" },
   {
-    text: "Contacts Information",
-    icon: <ContactsOutlinedIcon />,
-    path: "/contacts",
+    text: "Requests",
+    icon: <RequestQuoteIcon />,
+    path: "/requests",
   },
   {
-    text: "Invoices Balances",
-    icon: <ReceiptOutlinedIcon />,
-    path: "/invoices",
+    text: "Offers Wall",
+    icon: <BlurLinearIcon />,
+    path: "/offers-wall",
+  },
+  {
+    text: "Top Offers",
+    icon: <LocalOfferIcon />,
+    path: "/top-offers",
   },
 ];
 
@@ -213,7 +221,6 @@ function SideBar({ open, handleDrawerClose }) {
                   justifyContent: "center",
                 }}
               >
-                {" "}
                 {item.icon}
               </ListItemIcon>
               <ListItemText
