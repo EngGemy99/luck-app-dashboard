@@ -6,6 +6,10 @@ export const fetchUser = createAsyncThunk("user/fetchUser", async (userId) => {
   const { data } = await LukeApp.get(`user/${userId}`);
   return data.user;
 });
+export const addAllUsers = createAsyncThunk("user/addAllUsers", async () => {
+  const { data } = await LukeApp.get(`admin`);
+  return data.users;
+});
 
 // export const addFavorite = createAsyncThunk(
 //   "user/addFavorite",
@@ -50,8 +54,27 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    addAllUsers: (state, action) => {
-      state.Allusers =  action.payload ;
+    editAllUsers: (state, action) => {
+      state.Allusers= state.Allusers.filter(value=>value._id != action.payload)
+      console.log(state.Allusers)
+    },
+    editStatus: (state, action) => {
+      // state.Allusers= 
+      // if()
+      const oneUser=state.Allusers.find(value=>value._id == action.payload)
+      if (oneUser.status =="active")
+      {
+        oneUser.status="block"
+      }else{
+        oneUser.status="active"
+
+      }
+      state.Allusers.map((value,index)=>{
+        if(value._id == action.payload)
+        {
+          state.Allusers[index]=oneUser
+        }
+      })
     },
   },
   extraReducers: {
@@ -59,13 +82,17 @@ const userSlice = createSlice({
       state.loading = false;
       state.user = { ...action.payload };
     },
+    [addAllUsers.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.Allusers =  action.payload ;
+    },
 
   },
 });
 
 export const {
-  addInfo,
-
-  addAllUsers
+  // addInfo,
+  editAllUsers,
+  editStatus
 } = userSlice.actions;
 export default userSlice.reducer;

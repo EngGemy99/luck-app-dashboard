@@ -104,15 +104,11 @@ function Team() {
     const { data } = await LukeApp.get(`admin`);
     dispatch(addAllUsers(data.users))
   };
-  useEffect(() => {
-    if (Allusers.length == 0 ) {
-      getAllUsers();
-    }
-  }, []);
+
 
   return (
     <Box sx={{ height: 650, width: "98%" }}>
-      <DataGrid rows={Allusers} columns={columns} />
+      <DataGrid  rows={Allusers} columns={columns} />
     </Box>
   );
 }

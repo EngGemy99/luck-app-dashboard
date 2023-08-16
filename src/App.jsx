@@ -13,7 +13,7 @@ import TopBar from "./Components/TopBar";
 import { getDesignTokens } from "./theme";
 import { Outlet, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUser } from "./store/Slices/userSlice";
+import { addAllUsers, fetchUser } from "./store/Slices/userSlice";
 import { useEffect } from "react";
 
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -31,6 +31,9 @@ export default function App() {
   const dispatch = useDispatch()
   const user = useSelector((state) => {
     return state.user?.user;
+  });
+  const allUsers = useSelector((state) => {
+    return state.user?.Allusers;
   });
 
   const [mode, setMode] = React.useState(
@@ -59,8 +62,11 @@ export default function App() {
       const decodedToken = jwt_decode(token);
       const userId = decodedToken.userId;
       dispatch(fetchUser(userId));
+      dispatch(addAllUsers());
     }
   }, [dispatch, user._id]);
+  useEffect(()=>{
+  },[allUsers])
 
   return (
     <>
