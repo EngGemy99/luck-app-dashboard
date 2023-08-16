@@ -13,7 +13,7 @@ import TopBar from "./Components/TopBar";
 import { getDesignTokens } from "./theme";
 import { Outlet, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addAllUsers, fetchUser } from "./store/Slices/userSlice";
+import { addAllUsers, fetchUser, getRequests } from "./store/Slices/userSlice";
 import { useEffect } from "react";
 
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -63,6 +63,7 @@ export default function App() {
       const userId = decodedToken.userId;
       dispatch(fetchUser(userId));
       dispatch(addAllUsers());
+      dispatch(getRequests());
     }
   }, [dispatch, user._id]);
   useEffect(()=>{

@@ -16,17 +16,12 @@ import Tab from "@mui/material/Tab";
 import PropTypes from "prop-types";
 import LukeApp from "../../Api/config";
 import { DataGrid } from "@mui/x-data-grid";
+import { useSelector } from "react-redux";
 function Requests() {
-  const [rows, setRows] = useState([]);
-  const getAllRequest = async () => {
-    const { data } = await LukeApp.get(`request?status=pending`);
-    setRows(data.requests);
-  };
-  useEffect(() => {
-    getAllRequest();
-  }, []);
+  const requests = useSelector((state) => {
+    return state.user?.requests;
+  });
 
-  console.log(rows);
   const columns = [
     {
       field: "user.username",
@@ -161,7 +156,7 @@ function Requests() {
           <Box sx={{ height: 650, width: "98%" }}>
             <DataGrid
               getRowId={(row) => row._id}
-              rows={rows}
+              rows={requests.filter(value=>value.status=="pending")}
               columns={columns}
             />
           </Box>
@@ -176,7 +171,7 @@ function Requests() {
           <Box sx={{ height: 650, width: "98%" }}>
             <DataGrid
               getRowId={(row) => row._id}
-              rows={rows}
+              rows={requests.filter(value=>value.status=="accepted")}
               columns={columns}
             />
           </Box>
@@ -191,7 +186,7 @@ function Requests() {
           <Box sx={{ height: 650, width: "98%" }}>
             <DataGrid
               getRowId={(row) => row._id}
-              rows={rows}
+              rows={requests.filter(value=>value.status=="rejected")}
               columns={columns}
             />
           </Box>
