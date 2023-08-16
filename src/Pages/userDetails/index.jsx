@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import {
   Box,
@@ -11,14 +11,22 @@ import {
   Typography,
   Button,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Stack } from "@mui/system";
 import Swal from "sweetalert2";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import LukeApp from "../../Api/config";
+import { editAllUsers, editStatus } from "../../store/Slices/userSlice";
 function UserDetails() {
   const { id } = useParams();
+  const navigate = useNavigate()
+  const user = useSelector((state) => {
+    return state.user?.Allusers?.find((value) => value._id == id);
+  });
+  const [status, setStatus] = useState(user?.status);
+  const dispatch = useDispatch()
 
-  const handleStatus = () => {
+  const handleStatus = (statusReverse) => {
     Swal.fire({
       title: "Are you sure?",
       icon: "warning",
@@ -28,10 +36,46 @@ function UserDetails() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
+        blockUser(statusReverse)
         Swal.fire("Deleted!", "Your file has been deleted.", "success");
       }
     });
   };
+
+  const deleteUser = async () => {
+    try {
+
+      await LukeApp.delete(`/admin/${user._id}/delete`);
+      dispatch(editAllUsers(id))
+      navigate(-1)
+
+    }
+    catch (error) {
+      console.log(error)
+    }
+  };
+  const blockUser = async (statusReverse) => {
+    try {
+
+      await LukeApp.patch(`/admin/${user._id}/edit-status`, {
+        "status":statusReverse
+      });
+      dispatch(editStatus(id))
+      if(status =='blocked')
+      {
+        setStatus('active')
+      }else setStatus('blocked')
+
+    }
+    catch (error) {
+      console.log(error)
+    }
+  };
+
+  // const blockUser = async () => {
+  //   const { data } = await LukeApp.get(`admin`);
+  //   // dispatch(addAllUsers(data.users))
+  // };
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} md={4}>
@@ -55,10 +99,10 @@ function UserDetails() {
           />
           <CardContent sx={{ textAlign: "center" }}>
             <Typography gutterBottom variant="h5" component="div">
-              User
+              {user?.userName}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              User@gamil.com
+              {user?.email}
             </Typography>
           </CardContent>
         </Card>
@@ -71,31 +115,28 @@ function UserDetails() {
         >
           <form>
             <TextField
-              label="Username"
               fullWidth
               variant="outlined"
               disabled
-              value="ahemd jamal"
+              value={user?.userName}
               sx={{
                 mb: 3,
               }}
             />
             <TextField
-              label="email"
               fullWidth
               variant="outlined"
               disabled
-              value="ahemdjamal@gamil.com"
+              value={user?.email}
               sx={{
                 mb: 3,
               }}
             />
             <TextField
-              label="points"
               fullWidth
               variant="outlined"
               disabled
-              value="30"
+              value={user?.points}
               sx={{
                 mb: 3,
               }}
@@ -110,19 +151,31 @@ function UserDetails() {
                   sx={{ mr: 1 }}
                   variant="contained"
                   color="error"
-                  type="submit"
+                  onClick={deleteUser}
                 >
                   delete user
                 </Button>
-                <Button
-                  variant="contained"
-                  color="error"
-                  onClick={() => {
-                    handleStatus();
-                  }}
-                >
-                  block user
-                </Button>
+                {
+                  status == "active" ? <Button
+                    variant="contained"
+                    color="error"
+                    onClick={() => {
+                      handleStatus("blocked")
+                    }}
+                  >
+                    Block user
+                  </Button> : <Button
+                    variant="contained"
+                    color="success"
+                    onClick={() => {
+                      handleStatus("active");
+                    }}
+                  >
+                    active user
+                  </Button>
+                }
+
+
               </Box>
             </Stack>
           </form>
