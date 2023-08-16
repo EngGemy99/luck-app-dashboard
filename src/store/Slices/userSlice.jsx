@@ -1,10 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import LukeApp from "../../Api/config";
 
-
 export const fetchUser = createAsyncThunk("user/profile", async () => {
   const { data } = await LukeApp.get(`user/profile`);
-  console.log(data)
   return data;
 });
 
@@ -53,9 +51,7 @@ const initialState = {
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {
- 
-  },
+  reducers: {},
   extraReducers: {
     [fetchUser.fulfilled]: (state, action) => {
       state.loading = false;

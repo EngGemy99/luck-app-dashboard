@@ -26,8 +26,10 @@ import Profile from "./Pages/Profile/index.jsx";
 import Login from "./Pages/Login/index.jsx";
 
 import { Provider } from "react-redux";
-import store from './store/store';
-
+import store from "./store/store";
+import OffersWall from "./Pages/OffersWall/index.jsx";
+import TopOffers from "./Pages/TopOffers/index.jsx";
+import Requests from "./Pages/Requests/index.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -37,6 +39,9 @@ const router = createBrowserRouter(
       <Route path="team/:id" element={<UserDetails />} />
       <Route path="profile" element={<Profile />} />
       <Route path="login" element={<Login />} />
+      <Route path="offers-wall" element={<OffersWall />} />
+      <Route path="requests" element={<Requests />} />
+      <Route path="top-offers" element={<TopOffers />} />
       <Route path="contacts" element={<Contacts />} />
       <Route path="invoices" element={<Invoices />} />
       <Route path="form" element={<ProfileForm />} />
@@ -51,7 +56,7 @@ const router = createBrowserRouter(
 );
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-      <Provider store={store}>
-        <RouterProvider router={router} />
-      </Provider>
+  <Provider store={store}>
+    <RouterProvider router={router} />
+  </Provider>
 );

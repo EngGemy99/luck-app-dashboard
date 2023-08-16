@@ -16,7 +16,6 @@ import { useDispatch } from "react-redux";
 import { fetchUser } from "./store/Slices/userSlice";
 import { useEffect } from "react";
 
-
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
@@ -29,7 +28,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 export default function App() {
   const [open, setOpen] = React.useState(false);
   const cursorRef = React.useRef(null);
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
   const [mode, setMode] = React.useState(
     localStorage.getItem("currentMode") || "light"
   );
@@ -52,7 +51,6 @@ export default function App() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    console.log(token)
     if (token) {
       // const decodedToken = jwt_decode(token);
       // const userId = decodedToken.userId;
