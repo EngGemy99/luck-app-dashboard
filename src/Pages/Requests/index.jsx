@@ -17,48 +17,70 @@ import PropTypes from "prop-types";
 import LukeApp from "../../Api/config";
 import { DataGrid } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
-import { PendingColumns, AcceptedColumns, RejectedColumns } from "./data";
 import { editRequestStatus } from "../../store/Slices/userSlice";
+import { accepted, rejected } from "./data";
+import Swal from "sweetalert2";
 function Requests() {
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
   const requests = useSelector((state) => {
     return state.user?.requests;
   });
 
   const changeStatus = async (requestID, status) => {
     try {
-      await LukeApp.patch(`/request/${requestID}`, {
-        status,
-      });
-      dispatch(editRequestStatus({_id:requestID,status}))
-      
+      if (status === "rejected") {
+        const result = await Swal.fire({
+          title: "Are you sure?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes",
+        });
+        if (result.isConfirmed) {
+          await LukeApp.patch(`/request/${requestID}`, {
+            status,
+          });
+          dispatch(editRequestStatus({ _id: requestID, status }));
+          await Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        }
+      } else {
+        await LukeApp.patch(`/request/${requestID}`, {
+          status,
+        });
+        dispatch(editRequestStatus({ _id: requestID, status }));
+      }
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const columns = [
     {
       field: "user.username",
       headerName: "User Name",
-      flex: 1,
       align: "center",
       headerAlign: "center",
       valueGetter: (params) => params.row?.user?.userName,
+      minWidth: 80,
+      flex: 1,
     },
     {
       field: "paymentName",
       headerName: "Payment Name",
-      flex: 1,
+
       align: "center",
       headerAlign: "center",
+      minWidth: 120,
+      flex: 1,
     },
     {
       field: "paymentWay",
       headerName: "Payment Way",
-      flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 120,
+      flex: 1,
       valueGetter: (params) => {
         const isEmail = params.row?.email?.includes("@");
         if (isEmail) {
@@ -71,61 +93,62 @@ function Requests() {
     {
       field: "countPoint",
       headerName: "Count Point",
-      flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 90,
+      flex: 1,
     },
     {
       field: "requestedAt",
       headerName: "Date",
-      flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 120,
+      flex: 1,
       valueGetter: (params) => {
         const dateObject = new Date(params.row.requestedAt);
-        const readableDate = `${dateObject.getMonth() + 1
-          }/${dateObject.getDate()}/${dateObject.getFullYear()}`;
+        const readableDate = `${
+          dateObject.getMonth() + 1
+        }/${dateObject.getDate()}/${dateObject.getFullYear()}`;
         return readableDate;
       },
     },
     {
       field: "Action",
       headerName: "Action",
-      flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 150,
+      flex: 1,
       renderCell: ({ row }) => {
         return (
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
-              gap: 1
+              flexDirection: "column",
+              gap: 1,
             }}
           >
-            {
-              row.status == "pending" && (<Button onClick={() => changeStatus(row._id, 'accepted')} variant="contained" color="success">
+            {row.status == "pending" && (
+              <Button
+                onClick={() => changeStatus(row._id, "accepted")}
+                variant="contained"
+                color="success"
+              >
                 Accept
-              </Button>)
-            }
+              </Button>
+            )}
 
-            {
-              row.status == "pending" && (<Button onClick={() => changeStatus(row._id, 'rejected')} variant="contained" color="error">
+            {row.status == "pending" && (
+              <Button
+                onClick={() => changeStatus(row._id, "rejected")}
+                variant="contained"
+                color="error"
+              >
                 Reject
-              </Button>)
-            }
-            {
-              row.status == "accepted" && (<Button  onClick={() => changeStatus(row._id, 'pending')} variant="contained" color="primary">
-                Track
-              </Button>)
-            }
-            {
-              row.status == "rejected" && (<Button onClick={() => changeStatus(row._id, 'pending')} variant="contained" color="primary">
-                Change To Pending
-              </Button>)
-            }
-
-
+              </Button>
+            )}
           </Box>
         );
       },
@@ -185,11 +208,21 @@ function Requests() {
             p: 4,
           }}
         >
-          <Box sx={{ height: 650, width: "98%" }}>
+          <Box sx={{ height: 650, width: "100%" }}>
             <DataGrid
               getRowId={(row) => row._id}
               rows={requests.filter((value) => value.status == "pending")}
               columns={columns}
+              rowHeight={100}
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 5,
+                  },
+                },
+              }}
+              pageSizeOptions={[5]}
+              disableRowSelectionOnClick
             />
           </Box>
         </Paper>
@@ -200,11 +233,20 @@ function Requests() {
             p: 4,
           }}
         >
-          <Box sx={{ height: 650, width: "98%" }}>
+          <Box sx={{ height: 650, width: "100%" }}>
             <DataGrid
               getRowId={(row) => row._id}
               rows={requests.filter((value) => value.status == "accepted")}
-              columns={columns}
+              columns={accepted}
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 5,
+                  },
+                },
+              }}
+              pageSizeOptions={[5]}
+              disableRowSelectionOnClick
             />
           </Box>
         </Paper>
@@ -215,11 +257,20 @@ function Requests() {
             p: 4,
           }}
         >
-          <Box sx={{ height: 650, width: "98%" }}>
+          <Box sx={{ height: 650, width: "100%" }}>
             <DataGrid
               getRowId={(row) => row._id}
               rows={requests.filter((value) => value.status == "rejected")}
-              columns={columns}
+              columns={rejected}
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 5,
+                  },
+                },
+              }}
+              pageSizeOptions={[5]}
+              disableRowSelectionOnClick
             />
           </Box>
         </Paper>

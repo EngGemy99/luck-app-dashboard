@@ -90,39 +90,50 @@ function OffersWall() {
               {[..."x".repeat(5)].map((item) => (
                 <Card
                   sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
                     p: 2,
-                    alignItems: "center",
                     mb: "1rem",
                   }}
                 >
-                  <Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      flexWrap: "wrap",
+                    }}
+                  >
                     <CardMedia
                       component="img"
-                      height="100"
+                      height="80"
                       sx={{
-                        width: "100px",
+                        width: "80px",
                         borderRadius: "50%",
                       }}
                       image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAaeVfXxyG1sNBohvr-x5NOCzM9lvcF_pTzA&usqp=CAU"
                     />
-                  </Box>
-                  <Box>
-                    <CardContent>
+                    <CardContent
+                      sx={{
+                        flexShrink: 1,
+                      }}
+                    >
                       <Typography variant="body1">test element</Typography>
                       <Typography variant="subtitle1">
                         description element
                       </Typography>
                     </CardContent>
                   </Box>
-                  <Box>
+                  <Box
+                    sx={{
+                      textAlign: "right",
+                    }}
+                  >
                     <Button
                       variant="contained"
                       color="error"
                       sx={{
                         mr: ".5rem",
                         color: "inherit",
+                        padding: "5px 11px",
                       }}
                     >
                       Deactivate
@@ -149,33 +160,42 @@ function OffersWall() {
               {[..."x".repeat(10)].map((item) => (
                 <Card
                   sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
                     p: 2,
-                    alignItems: "center",
                     mb: "1rem",
                   }}
                 >
-                  <Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
                     <CardMedia
                       component="img"
-                      height="100"
+                      height="80"
                       sx={{
-                        width: "100px",
+                        width: "80px",
                         borderRadius: "50%",
                       }}
                       image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAaeVfXxyG1sNBohvr-x5NOCzM9lvcF_pTzA&usqp=CAU"
                     />
-                  </Box>
-                  <Box>
-                    <CardContent>
+                    <CardContent
+                      sx={{
+                        flexShrink: 1,
+                      }}
+                    >
                       <Typography variant="body1">test element</Typography>
                       <Typography variant="subtitle1">
                         description element
                       </Typography>
                     </CardContent>
                   </Box>
-                  <Box>
+                  <Box
+                    sx={{
+                      textAlign: "right",
+                    }}
+                  >
                     <Button
                       variant="contained"
                       color="success"

@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import LukeApp from "../../Api/config";
 
-
 export const fetchUser = createAsyncThunk("user/fetchUser", async (userId) => {
   const { data } = await LukeApp.get(`user/${userId}`);
   return data.user;
@@ -52,7 +51,7 @@ const initialState = {
   loading: false,
   error: null,
   Allusers: [],
-  requests: []
+  requests: [],
 };
 
 const userSlice = createSlice({
@@ -60,34 +59,38 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     editAllUsers: (state, action) => {
-      state.Allusers = state.Allusers.filter(value => value._id != action.payload)
-      console.log(state.Allusers)
+      state.Allusers = state.Allusers.filter(
+        (value) => value._id != action.payload
+      );
+      console.log(state.Allusers);
     },
     editStatus: (state, action) => {
-      // state.Allusers= 
+      // state.Allusers=
       // if()
-      const oneUser = state.Allusers.find(value => value._id == action.payload)
+      const oneUser = state.Allusers.find(
+        (value) => value._id == action.payload
+      );
       if (oneUser.status == "active") {
-        oneUser.status = "block"
+        oneUser.status = "block";
       } else {
-        oneUser.status = "active"
-
+        oneUser.status = "active";
       }
       state.Allusers.map((value, index) => {
         if (value._id == action.payload) {
-          state.Allusers[index] = oneUser
+          state.Allusers[index] = oneUser;
         }
-      })
+      });
     },
     editRequestStatus: (state, action) => {
-      const oneUser = state.requests.find(value => value._id == action.payload._id)
-
-      oneUser.status = action.payload.status
+      const oneUser = state.requests.find(
+        (value) => value._id == action.payload._id
+      );
+      oneUser.status = action.payload.status;
       state.Allusers.map((value, index) => {
         if (value._id == action.payload._id) {
-          state.Allusers[index] = oneUser
+          state.Allusers[index] = oneUser;
         }
-      })
+      });
     },
   },
   extraReducers: {
@@ -103,7 +106,6 @@ const userSlice = createSlice({
       state.loading = false;
       state.requests = action.payload;
     },
-
   },
 });
 
@@ -111,6 +113,6 @@ export const {
   // addInfo,
   editAllUsers,
   editStatus,
-  editRequestStatus
+  editRequestStatus,
 } = userSlice.actions;
 export default userSlice.reducer;

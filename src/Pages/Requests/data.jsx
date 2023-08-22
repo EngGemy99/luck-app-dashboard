@@ -1,26 +1,30 @@
 import { Box, Button } from "@mui/material";
-export const PendingColumns = [
+export const accepted = [
   {
     field: "user.username",
     headerName: "User Name",
-    flex: 1,
     align: "center",
     headerAlign: "center",
     valueGetter: (params) => params.row?.user?.userName,
+    minWidth: 80,
+    flex: 1,
   },
   {
     field: "paymentName",
     headerName: "Payment Name",
-    flex: 1,
+
     align: "center",
     headerAlign: "center",
+    minWidth: 120,
+    flex: 1,
   },
   {
     field: "paymentWay",
     headerName: "Payment Way",
-    flex: 1,
     align: "center",
     headerAlign: "center",
+    minWidth: 120,
+    flex: 1,
     valueGetter: (params) => {
       const isEmail = params.row?.email?.includes("@");
       if (isEmail) {
@@ -33,103 +37,18 @@ export const PendingColumns = [
   {
     field: "countPoint",
     headerName: "Count Point",
-    flex: 0.5,
     align: "center",
     headerAlign: "center",
+    minWidth: 90,
+    flex: 1,
   },
   {
     field: "requestedAt",
     headerName: "Date",
+    align: "center",
+    headerAlign: "center",
+    minWidth: 120,
     flex: 1,
-    align: "center",
-    headerAlign: "center",
-    valueGetter: (params) => {
-      const dateObject = new Date(params.row.requestedAt);
-      const readableDate = `${
-        dateObject.getMonth() + 1
-      }/${dateObject.getDate()}/${dateObject.getFullYear()}`;
-      return readableDate;
-    },
-  },
-  {
-    field: "Action",
-    headerName: "Action",
-    flex: 2,
-    align: "center",
-    headerAlign: "center",
-    renderCell: ({ row: { status } }) => {
-      return (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-evenly",
-            alignItems: "center",
-          }}
-        >
-          <Button
-            variant="contained"
-            color="success"
-            sx={{
-              mr: ".5rem",
-            }}
-            onClick={() => {
-              console.log("Accepted");
-            }}
-          >
-            Accept
-          </Button>
-          <Button variant="contained" color="error">
-            Reject
-          </Button>
-        </Box>
-      );
-    },
-  },
-];
-export const AcceptedColumns = [
-  {
-    field: "user.username",
-    headerName: "User Name",
-    flex: 1,
-    align: "center",
-    headerAlign: "center",
-    valueGetter: (params) => params.row?.user?.userName,
-  },
-  {
-    field: "paymentName",
-    headerName: "Payment Name",
-    flex: 1,
-    align: "center",
-    headerAlign: "center",
-  },
-  {
-    field: "paymentWay",
-    headerName: "Payment Way",
-    flex: 1,
-    align: "center",
-    headerAlign: "center",
-    valueGetter: (params) => {
-      const isEmail = params.row?.email?.includes("@");
-      if (isEmail) {
-        return params.row.email;
-      } else {
-        return params.row.phone;
-      }
-    },
-  },
-  {
-    field: "countPoint",
-    headerName: "Count Point",
-    flex: 1,
-    align: "center",
-    headerAlign: "center",
-  },
-  {
-    field: "requestedAt",
-    headerName: "Date",
-    flex: 1,
-    align: "center",
-    headerAlign: "center",
     valueGetter: (params) => {
       const dateObject = new Date(params.row.requestedAt);
       const readableDate = `${
@@ -139,28 +58,32 @@ export const AcceptedColumns = [
     },
   },
 ];
-export const RejectedColumns = [
+export const rejected = [
   {
     field: "user.username",
     headerName: "User Name",
-    flex: 1,
     align: "center",
     headerAlign: "center",
     valueGetter: (params) => params.row?.user?.userName,
+    minWidth: 80,
+    flex: 1,
   },
   {
     field: "paymentName",
     headerName: "Payment Name",
-    flex: 1,
+
     align: "center",
     headerAlign: "center",
+    minWidth: 120,
+    flex: 1,
   },
   {
     field: "paymentWay",
     headerName: "Payment Way",
-    flex: 1,
     align: "center",
     headerAlign: "center",
+    minWidth: 120,
+    flex: 1,
     valueGetter: (params) => {
       const isEmail = params.row?.email?.includes("@");
       if (isEmail) {
@@ -173,16 +96,18 @@ export const RejectedColumns = [
   {
     field: "countPoint",
     headerName: "Count Point",
-    flex: 1,
     align: "center",
     headerAlign: "center",
+    minWidth: 90,
+    flex: 1,
   },
   {
     field: "requestedAt",
     headerName: "Date",
-    flex: 1,
     align: "center",
     headerAlign: "center",
+    minWidth: 120,
+    flex: 1,
     valueGetter: (params) => {
       const dateObject = new Date(params.row.requestedAt);
       const readableDate = `${
@@ -191,4 +116,62 @@ export const RejectedColumns = [
       return readableDate;
     },
   },
+  //   {
+  //     field: "Action",
+  //     headerName: "Action",
+  //     align: "center",
+  //     headerAlign: "center",
+  //     minWidth: 150,
+  //     flex: 1,
+  //     renderCell: ({ row }) => {
+  //       return (
+  //         <Box
+  //           sx={{
+  //             display: "flex",
+  //             alignItems: "center",
+  //             flexDirection: "column",
+  //             gap: 1,
+  //           }}
+  //         >
+  //           {row.status == "pending" && (
+  //             <Button
+  //               onClick={() => changeStatus(row._id, "accepted")}
+  //               variant="contained"
+  //               color="success"
+  //             >
+  //               Accept
+  //             </Button>
+  //           )}
+
+  //           {row.status == "pending" && (
+  //             <Button
+  //               onClick={() => changeStatus(row._id, "rejected")}
+  //               variant="contained"
+  //               color="error"
+  //             >
+  //               Reject
+  //             </Button>
+  //           )}
+  //           {row.status == "accepted" && (
+  //             <Button
+  //               onClick={() => changeStatus(row._id, "pending")}
+  //               variant="contained"
+  //               color="primary"
+  //             >
+  //               Track
+  //             </Button>
+  //           )}
+  //           {row.status == "rejected" && (
+  //             <Button
+  //               onClick={() => changeStatus(row._id, "pending")}
+  //               variant="contained"
+  //               color="primary"
+  //             >
+  //               Change To Pending
+  //             </Button>
+  //           )}
+  //         </Box>
+  //       );
+  //     },
+  //   },
 ];
