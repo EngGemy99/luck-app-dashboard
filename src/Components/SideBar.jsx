@@ -28,6 +28,9 @@ import BlurLinearIcon from "@mui/icons-material/BlurLinear";
 import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import AodIcon from "@mui/icons-material/Aod";
+import DeviceHubIcon from "@mui/icons-material/DeviceHub";
+import BookOnlineIcon from "@mui/icons-material/BookOnline";
 
 import pic from "../assets/pic.jpg";
 const drawerWidth = 240;
@@ -97,20 +100,19 @@ const ListOne = [
 ];
 const ListTwo = [
   { text: "Payments", icon: <AttachMoneyIcon />, path: "/payment" },
-  { text: "Calendar", icon: <CalendarTodayOutlinedIcon />, path: "/calendar" },
+  { text: "TabJoy", icon: <AodIcon />, path: "/tab-joy" },
   {
-    text: "FAQ Page",
-    icon: <HelpOutlineOutlinedIcon />,
-    path: "/faq",
+    text: "Iroun Source",
+    icon: <DeviceHubIcon />,
+    path: "/iroun-source",
+  },
+  {
+    text: "Wannds",
+    icon: <BookOnlineIcon />,
+    path: "/wannds",
   },
 ];
 
-const ListThree = [
-  { text: "Bar Chart", icon: <BarChartOutlinedIcon />, path: "/bar" },
-  { text: "Pie Chart", icon: <PieChartOutlineOutlinedIcon />, path: "/pie" },
-  { text: "Line Chart", icon: <TimelineOutlinedIcon />, path: "/line" },
-  { text: "Geography Chart", icon: <MapOutlinedIcon />, path: "/geography" },
-];
 function SideBar({ open, handleDrawerClose }) {
   const theme = useTheme();
   const navigate = useNavigate();
@@ -228,46 +230,6 @@ function SideBar({ open, handleDrawerClose }) {
                   justifyContent: "center",
                 }}
               >
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText
-                primary={item.text}
-                sx={{ opacity: open ? 1 : 0 }}
-              />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {ListThree.map((item) => (
-          <ListItem
-            key={item.path}
-            disablePadding
-            sx={{ display: "block" }}
-            onClick={() => navigate(item.path)}
-          >
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-                background:
-                  location.pathname === item.path
-                    ? theme.palette.mode === "dark"
-                      ? grey[800]
-                      : grey[100]
-                    : null,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                {" "}
                 {item.icon}
               </ListItemIcon>
               <ListItemText

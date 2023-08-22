@@ -21,22 +21,10 @@ const DashboardPage = () => {
           title={"DASHBOARD"}
           subTitle={"Welcome to your dashboard"}
         />
-
-        <Box sx={{ textAlign: "right", mb: 1.3 }}>
-          <Button
-            sx={{ padding: "6px 8px", textTransform: "capitalize" }}
-            variant="contained"
-            color="primary"
-          >
-            <DownloadOutlined />
-            Download Reports
-          </Button>
-        </Box>
       </Stack>
 
       <Row1 />
-      <Row2 />
-      <Row3 />
+      {/* <Row2 /> */}
     </Box>
   );
 };

@@ -7,28 +7,26 @@ import {
 } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
-import jwt_decode from "jwt-decode";
 import SideBar from "./Components/SideBar";
 import TopBar from "./Components/TopBar";
 import { getDesignTokens } from "./theme";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addAllUsers, fetchUser, getRequests } from "./store/Slices/userSlice";
 import { useEffect } from "react";
-
+import jwt_decode from "jwt-decode";
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "flex-end",
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
 
 export default function App() {
   const [open, setOpen] = React.useState(false);
   const cursorRef = React.useRef(null);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const user = useSelector((state) => {
     return state.user?.user;
   });
@@ -40,13 +38,14 @@ export default function App() {
     localStorage.getItem("currentMode") || "light"
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     const cursor = cursorRef.current;
     document.body.addEventListener("mousemove", function (event) {
       cursor.style.top = `${event.clientY}px`;
       cursor.style.left = `${event.clientX}px`;
     });
   }, []);
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -66,8 +65,8 @@ export default function App() {
       dispatch(getRequests());
     }
   }, [dispatch, user._id]);
-  useEffect(()=>{
-  },[allUsers])
+
+  useEffect(() => {}, [allUsers]);
 
   return (
     <>

@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
-
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -11,48 +10,112 @@ import {
 } from "react-router-dom";
 import Team from "./Pages/team/Team.jsx";
 import DashboardPage from "./Pages/dashboard/DashboardPage.jsx";
-import GeographyChart from "./Pages/geographyChart/GeographyChart.jsx";
-import LineChart from "./Pages/lineChart/LineChart.jsx";
-import PieChart from "./Pages/pieChart/PieChart.jsx";
-import BarChart from "./Pages/barChart/BarChart.jsx";
-import FAQPage from "./Pages/fAQPage/FAQPage.jsx";
-import Calendar from "./Pages/calendar/Calendar.jsx";
-import ProfileForm from "./Pages/profileForm/ProfileForm.jsx";
-import Invoices from "./Pages/invoices/Invoices.jsx";
-import Contacts from "./Pages/contacts/Contacts.jsx";
 import UserDetails from "./Pages/userDetails/index.jsx";
-
 import Profile from "./Pages/Profile/index.jsx";
 import Login from "./Pages/Login/index.jsx";
-
 import { Provider } from "react-redux";
 import store from "./store/store";
 import OffersWall from "./Pages/OffersWall/index.jsx";
 import TopOffers from "./Pages/TopOffers/index.jsx";
 import Requests from "./Pages/Requests/index.jsx";
 import Payments from "./Pages/Payments/index.jsx";
+import TabJoy from "./Pages/tabjoy/index.jsx";
+import IrounSource from "./Pages/irounSource/index.jsx";
+import Wannds from "./Pages/wannds/index.jsx";
+import PrivateRoute from "./utils/PrivateRoute.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-      <Route index element={<DashboardPage />} />
-      <Route path="team" element={<Team />} />
-      <Route path="team/:id" element={<UserDetails />} />
-      <Route path="profile" element={<Profile />} />
+      <Route
+        index
+        element={
+          <PrivateRoute>
+            <DashboardPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="team"
+        element={
+          <PrivateRoute>
+            <Team />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="team/:id"
+        element={
+          <PrivateRoute>
+            <UserDetails />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="profile"
+        element={
+          <PrivateRoute>
+            <Profile />
+          </PrivateRoute>
+        }
+      />
       <Route path="login" element={<Login />} />
-      <Route path="offers-wall" element={<OffersWall />} />
-      <Route path="requests" element={<Requests />} />
-      <Route path="top-offers" element={<TopOffers />} />
-      <Route path="payment" element={<Payments />} />
-      <Route path="contacts" element={<Contacts />} />
-      <Route path="invoices" element={<Invoices />} />
-      <Route path="form" element={<ProfileForm />} />
-      <Route path="calendar" element={<Calendar />} />
-      <Route path="faq" element={<FAQPage />} />
-      <Route path="bar" element={<BarChart />} />
-      <Route path="pie" element={<PieChart />} />
-      <Route path="line" element={<LineChart />} />
-      <Route path="geography" element={<GeographyChart />} />
+      <Route
+        path="offers-wall"
+        element={
+          <PrivateRoute>
+            <OffersWall />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="requests"
+        element={
+          <PrivateRoute>
+            <Requests />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="top-offers"
+        element={
+          <PrivateRoute>
+            <TopOffers />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="payment"
+        element={
+          <PrivateRoute>
+            <Payments />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="tab-joy"
+        element={
+          <PrivateRoute>
+            <TabJoy />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="iroun-source"
+        element={
+          <PrivateRoute>
+            <IrounSource />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="wannds"
+        element={
+          <PrivateRoute>
+            <Wannds />
+          </PrivateRoute>
+        }
+      />
     </Route>
   )
 );

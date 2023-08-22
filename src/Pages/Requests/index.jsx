@@ -158,9 +158,8 @@ function Requests() {
           <Box sx={{ height: 650, width: "98%" }}>
             <DataGrid
               getRowId={(row) => row._id}
-              rows={requests.filter(value=>value.status=="pending")}
+              rows={requests.filter((value) => value.status == "pending")}
               columns={columns}
-
             />
           </Box>
         </Paper>
@@ -174,9 +173,8 @@ function Requests() {
           <Box sx={{ height: 650, width: "98%" }}>
             <DataGrid
               getRowId={(row) => row._id}
-              rows={requests.filter(value=>value.status=="accepted")}
+              rows={requests.filter((value) => value.status == "accepted")}
               columns={columns}
-
             />
           </Box>
         </Paper>
@@ -190,7 +188,7 @@ function Requests() {
           <Box sx={{ height: 650, width: "98%" }}>
             <DataGrid
               getRowId={(row) => row._id}
-              rows={requests.filter(value=>value.status=="rejected")}
+              rows={requests.filter((value) => value.status == "rejected")}
               columns={columns}
             />
           </Box>

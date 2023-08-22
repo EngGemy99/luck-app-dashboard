@@ -81,7 +81,7 @@ function Payments() {
               }}
             >
               <Typography variant="h5" color="inherit">
-                Active Top Offer
+                Active Payment
               </Typography>
               <Divider />
               {[..."x".repeat(5)].map((item) => (
@@ -140,7 +140,7 @@ function Payments() {
               }}
             >
               <Typography variant="h5" color="inherit">
-                Deactivated Top Offer
+                Deactivated Payment
               </Typography>
               <Divider />
               {[..."x".repeat(10)].map((item) => (

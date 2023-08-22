@@ -240,6 +240,18 @@ function TopOffers() {
             />
             <br />
             <TextField
+              error={errors.point}
+              helperText={errors.point?.message}
+              {...register("point")}
+              label="point"
+              variant="outlined"
+              fullWidth
+              sx={{
+                mb: 3,
+              }}
+            />
+            <br />
+            <TextField
               type="file"
               variant="outlined"
               fullWidth

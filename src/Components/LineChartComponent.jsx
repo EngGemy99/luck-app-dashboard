@@ -277,7 +277,7 @@ function LineChartComponent({ isDashbord = false }) {
   const theme = useTheme();
 
   return (
-    <Box sx={{ height: isDashbord ? "300px" : "75vh" }}>
+    <Box sx={{ height: isDashbord ? "200px" : "75vh" }}>
       <ResponsiveLine
         theme={{
           textColor: theme.palette.text.primary,

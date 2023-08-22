@@ -6,9 +6,11 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import TrafficIcon from "@mui/icons-material/Traffic";
 import { data1, data2, data3, data4 } from "./data";
 import Card from "./Card";
+import { useSelector } from "react-redux";
 
 const Row1 = () => {
   const theme = useTheme();
+  let { Allusers, requests } = useSelector((state) => state.user);
   return (
     <Grid container spacing={2} sx={{ mb: 5 }}>
       <Grid item xs={12} sm={6} md={4}>
@@ -33,9 +35,9 @@ const Row1 = () => {
               sx={{ fontSize: "23px", color: theme.palette.secondary.main }}
             />
           }
-          title={"431,225"}
-          subTitle={"Sales obtained"}
-          increase={"+21%"}
+          title={requests.filter((item) => item.status === "pending").length}
+          subTitle={"Pending requests"}
+          increase={"+40%"}
           data={data2}
           scheme={"category10"}
         />
@@ -48,9 +50,9 @@ const Row1 = () => {
               sx={{ fontSize: "23px", color: theme.palette.secondary.main }}
             />
           }
-          title={"32,441"}
-          subTitle={"New Clients"}
-          increase={"+5%"}
+          title={Allusers.length}
+          subTitle={"All Users"}
+          increase={"+35%"}
           data={data3}
           scheme={"accent"}
         />
