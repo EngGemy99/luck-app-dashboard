@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   Button,
   Card,
@@ -17,7 +18,50 @@ import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "./schema";
+import Swal from "sweetalert2";
+import LukeApp from "../../Api/config";
+import { useDispatch, useSelector } from "react-redux";
+import { editPaymentStatus } from "../../store/Slices/userSlice";
 function Payments() {
+
+  const dispatch =useDispatch()
+  const payment = useSelector((state) => {
+    return state.user?.payments;
+  });
+
+  const changeStatus = async (requestID, status) => {
+    try {
+      if (status === "deactivate") {
+        const result = await Swal.fire({
+          title: "Are you sure?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes",
+        });
+        if (result.isConfirmed) {
+          await LukeApp.patch(`/payment/${requestID}`, {
+            status,
+          });
+          dispatch(editPaymentStatus({ _id: requestID, status }));
+          await Swal.fire(
+            "Deactivated!",
+            "Your Payment has been Deactivated.",
+            "success"
+          );
+        }
+      } else {
+        await LukeApp.patch(`/payment/${requestID}`, {
+          status,
+        });
+        dispatch(editPaymentStatus({ _id: requestID, status }));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
     return (
@@ -81,55 +125,70 @@ function Payments() {
               }}
             >
               <Typography variant="h5" color="inherit">
-                Active Payment
+                Active OfferWalls
               </Typography>
               <Divider />
-              {[..."x".repeat(5)].map((item) => (
-                <Card
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    p: 2,
-                    alignItems: "center",
-                    mb: "1rem",
-                  }}
-                >
-                  <Box>
-                    <CardMedia
-                      component="img"
-                      height="100"
+              {payment.map((item) => {
+                if (item.status == "active") {
+                  return (
+                    <Card key={item._id}
                       sx={{
-                        width: "100px",
-                        borderRadius: "50%",
-                      }}
-                      image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAaeVfXxyG1sNBohvr-x5NOCzM9lvcF_pTzA&usqp=CAU"
-                    />
-                  </Box>
-                  <Box>
-                    <CardContent>
-                      <Typography variant="body1">test element</Typography>
-                      <Typography variant="subtitle1">
-                        description element
-                      </Typography>
-                    </CardContent>
-                  </Box>
-                  <Box>
-                    <Button
-                      variant="contained"
-                      color="error"
-                      sx={{
-                        mr: ".5rem",
-                        color: "inherit",
+                        p: 2,
+                        mb: "1rem",
                       }}
                     >
-                      Deactivate
-                    </Button>
-                    <Button variant="contained" color="primary">
-                      Edit
-                    </Button>
-                  </Box>
-                </Card>
-              ))}
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          flexWrap: "wrap",
+                        }}
+                      >
+                        <Avatar
+                          sx={{
+                            height:"80px",
+                            width: "80px",
+                            borderRadius: "50%",
+                          }}
+                          src={item.image?.secure_url}
+                        />
+                        <CardContent
+                          sx={{
+                            flexShrink: 1,
+                          }}
+                        >
+                          <Typography variant="body1">{item.paymentName}</Typography>
+                        </CardContent>
+                      </Box>
+                      <Box
+                        sx={{
+                          textAlign: "right",
+                        }}
+                      >
+                        <Button
+                          variant="contained"
+                          color="error"
+                          sx={{
+                            mr: ".5rem",
+                            color: "inherit",
+                            padding: "5px 11px",
+                          }}
+                          onClick={() => changeStatus(item._id, "deactivate")}
+                        >
+                          Deactivate
+                        </Button>
+                        <Button variant="contained" color="primary">
+                          Edit
+                        </Button>
+                      </Box>
+                    </Card>
+                  )
+                }
+
+              }
+
+              )}
             </Paper>
           </Grid>
 
@@ -140,55 +199,68 @@ function Payments() {
               }}
             >
               <Typography variant="h5" color="inherit">
-                Deactivated Payment
+                Deactivated OfferWalls
               </Typography>
               <Divider />
-              {[..."x".repeat(10)].map((item) => (
-                <Card
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    p: 2,
-                    alignItems: "center",
-                    mb: "1rem",
-                  }}
-                >
-                  <Box>
-                    <CardMedia
-                      component="img"
-                      height="100"
+              {payment.map((item) => {
+                if (item.status == "deactivate") {
+                  return (
+                    <Card
+                      key={item._id}
                       sx={{
-                        width: "100px",
-                        borderRadius: "50%",
-                      }}
-                      image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAaeVfXxyG1sNBohvr-x5NOCzM9lvcF_pTzA&usqp=CAU"
-                    />
-                  </Box>
-                  <Box>
-                    <CardContent>
-                      <Typography variant="body1">test element</Typography>
-                      <Typography variant="subtitle1">
-                        description element
-                      </Typography>
-                    </CardContent>
-                  </Box>
-                  <Box>
-                    <Button
-                      variant="contained"
-                      color="success"
-                      sx={{
-                        mr: ".5rem",
-                        color: "inherit",
+                        p: 2,
+                        mb: "1rem",
                       }}
                     >
-                      active
-                    </Button>
-                    <Button variant="contained" color="primary">
-                      Edit
-                    </Button>
-                  </Box>
-                </Card>
-              ))}
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Avatar
+                          sx={{
+                            height:"80px",
+                            width: "80px",
+                            borderRadius: "50%",
+                          }}
+                          src={item.image?.secure_url}
+                        />
+                        <CardContent
+                          sx={{
+                            flexShrink: 1,
+                          }}
+                        >
+                          <Typography variant="body1">{item.paymentName}</Typography>
+                        </CardContent>
+                      </Box>
+                      <Box
+                        sx={{
+                          textAlign: "right",
+                        }}
+                      >
+                        <Button
+                          variant="contained"
+                          color="success"
+                          sx={{
+                            mr: ".5rem",
+                            color: "inherit",
+                          }}
+                          onClick={() => changeStatus(item._id, "active")}
+                        >
+                          active
+                        </Button>
+                        <Button variant="contained" color="primary">
+                          Edit
+                        </Button>
+                      </Box>
+                    </Card>
+                  )
+                }
+              }
+
+              )}
             </Paper>
           </Grid>
         </Grid>

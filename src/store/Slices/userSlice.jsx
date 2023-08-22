@@ -13,6 +13,18 @@ export const getRequests = createAsyncThunk("user/Requests", async () => {
   const { data } = await LukeApp.get(`request`);
   return data.requests;
 });
+export const getOffers = createAsyncThunk("user/offers", async () => {
+  const { data } = await LukeApp.get(`offers/wall`);
+  return data.result;
+});
+export const getTopOffers = createAsyncThunk("user/top-offers", async () => {
+  const { data } = await LukeApp.get(`/offers/top`);
+  return data.result;
+});
+export const getPayments = createAsyncThunk("user/payments", async () => {
+  const { data } = await LukeApp.get(`/payment`);
+  return data.paymentWays;
+});
 
 const initialState = {
   user: {
@@ -20,6 +32,9 @@ const initialState = {
   },
   allUsers: [],
   requests: [],
+  offers: [],
+  topOffers: [],
+  payments: [],
 };
 
 const userSlice = createSlice({
@@ -54,7 +69,7 @@ const userSlice = createSlice({
       oneUser.status = action.payload.status;
       state.allUsers.map((value, index) => {
         if (value._id == action.payload._id) {
-          state.allUsers[index] = oneUser;
+          state.requests[index] = oneUser;
         }
       });
     },
@@ -69,23 +84,62 @@ const userSlice = createSlice({
         }
       });
     },
+    editOfferStatus: (state, action) => {
+      const oneUser = state.offers.find(
+        (value) => value._id == action.payload._id
+      );
+      oneUser.status = action.payload.status;
+      state.offers.map((value, index) => {
+        if (value._id == action.payload._id) {
+          state.offers[index] = oneUser;
+        }
+      });
+    },
+    editAllOfferStatus: (state, action) => {
+      const oneUser = state.topOffers.find(
+        (value) => value._id == action.payload._id
+      );
+      oneUser.status = action.payload.status;
+      state.topOffers.map((value, index) => {
+        if (value._id == action.payload._id) {
+          state.topOffers[index] = oneUser;
+        }
+      });
+    },
+    editPaymentStatus: (state, action) => {
+      const oneUser = state.payments.find(
+        (value) => value._id == action.payload._id
+      );
+      oneUser.status = action.payload.status;
+      state.payments.map((value, index) => {
+        if (value._id == action.payload._id) {
+          state.payments[index] = oneUser;
+        }
+      });
+    },
   },
   extraReducers: {
     [fetchUser.fulfilled]: (state, action) => {
-      state.loading = false;
       state.user = { ...action.payload };
     },
     [addAllUsers.fulfilled]: (state, action) => {
-      state.loading = false;
       state.allUsers = action.payload;
     },
     [getRequests.fulfilled]: (state, action) => {
-      state.loading = false;
       state.requests = action.payload;
+    },
+    [getOffers.fulfilled]: (state, action) => {
+      state.offers = action.payload;
+    },
+    [getTopOffers.fulfilled]: (state, action) => {
+      state.topOffers = action.payload;
+    },
+    [getPayments.fulfilled]: (state, action) => {
+      state.payments = action.payload;
     },
   },
 });
 
-export const { editAllUsers, editStatus, editRequestStatus, editUserPoint } =
+export const { editAllUsers, editStatus, editRequestStatus, editUserPoint, editOfferStatus, editAllOfferStatus, editPaymentStatus } =
   userSlice.actions;
 export default userSlice.reducer;

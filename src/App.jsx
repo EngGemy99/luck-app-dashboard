@@ -12,7 +12,7 @@ import TopBar from "./Components/TopBar";
 import { getDesignTokens } from "./theme";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addAllUsers, fetchUser, getRequests } from "./store/Slices/userSlice";
+import { addAllUsers, fetchUser, getOffers, getPayments, getRequests, getTopOffers } from "./store/Slices/userSlice";
 import { useEffect } from "react";
 import jwt_decode from "jwt-decode";
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -63,6 +63,9 @@ export default function App() {
       dispatch(fetchUser(userId));
       dispatch(addAllUsers());
       dispatch(getRequests());
+      dispatch(getOffers());
+      dispatch(getTopOffers());
+      dispatch(getPayments());
     }
   }, [dispatch, user._id]);
 
