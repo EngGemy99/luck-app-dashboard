@@ -10,8 +10,8 @@ import { addAllUsers } from "../../store/Slices/userSlice";
 function Team() {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const Allusers = useSelector((state) => {
-    return state.user?.Allusers;
+  const allUsers = useSelector((state) => {
+    return state.user?.allUsers;
   });
 
   const columns = [
@@ -107,19 +107,31 @@ function Team() {
     },
   ];
   const [rows, setRows] = useState([]);
-  const getAllUsers = async () => {
+  const getallUsers = async () => {
     const { data } = await LukeApp.get(`admin`);
     dispatch(addAllUsers(data.users));
   };
   useEffect(() => {
-    if (Allusers.length == 0) {
-      getAllUsers();
+    if (allUsers.length == 0) {
+      getallUsers();
     }
   }, []);
 
   return (
     <Box sx={{ height: 650, width: "98%" }}>
-      <DataGrid  rows={Allusers} columns={columns} />
+      <DataGrid
+        rows={allUsers}
+        columns={columns}
+        initialState={{
+          pagination: {
+            paginationModel: {
+              pageSize: 10,
+            },
+          },
+        }}
+        pageSizeOptions={[10]}
+        disableRowSelectionOnClick
+      />
     </Box>
   );
 }

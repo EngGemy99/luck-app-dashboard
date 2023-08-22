@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 
 const Row1 = () => {
   const theme = useTheme();
-  let { Allusers, requests } = useSelector((state) => state.user);
+  let { allUsers, requests } = useSelector((state) => state.user);
   return (
     <Grid container spacing={2} sx={{ mb: 5 }}>
       <Grid item xs={12} sm={6} md={4}>
@@ -50,7 +50,7 @@ const Row1 = () => {
               sx={{ fontSize: "23px", color: theme.palette.secondary.main }}
             />
           }
-          title={Allusers.length}
+          title={allUsers.length}
           subTitle={"All Users"}
           increase={"+35%"}
           data={data3}

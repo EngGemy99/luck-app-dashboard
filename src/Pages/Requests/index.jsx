@@ -42,7 +42,11 @@ function Requests() {
             status,
           });
           dispatch(editRequestStatus({ _id: requestID, status }));
-          await Swal.fire("Deleted!", "Your file has been deleted.", "success");
+          await Swal.fire(
+            "rejected!",
+            "Your request has been rejected.",
+            "success"
+          );
         }
       } else {
         await LukeApp.patch(`/request/${requestID}`, {

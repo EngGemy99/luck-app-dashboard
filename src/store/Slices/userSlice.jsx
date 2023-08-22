@@ -14,43 +14,11 @@ export const getRequests = createAsyncThunk("user/Requests", async () => {
   return data.requests;
 });
 
-// export const addFavorite = createAsyncThunk(
-//   "user/addFavorite",
-//   async ({ userId, location }) => {
-//     await Roomster.post(`user/${userId}/favourites`, {
-//       apartmentId: location._id,
-//     });
-//     return location;
-//   }
-// );
-// export const deleteFavorite = createAsyncThunk(
-//   "user/deleteFavorite",
-//   async ({ userId, location }) => {
-//     const res = await Roomster.put(`user/${userId}/favourites`, {
-//       apartmentId: location._id,
-//     });
-//     return location;
-//   }
-// );
-
 const initialState = {
   user: {
     _id: "",
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    address: { country: "", city: "" },
-    image: {
-      url: "",
-      publicId: "",
-    },
-    favourites: [],
-    rentedApartments: [],
   },
-  loading: false,
-  error: null,
-  Allusers: [],
+  allUsers: [],
   requests: [],
 };
 
@@ -59,15 +27,13 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     editAllUsers: (state, action) => {
-      state.Allusers = state.Allusers.filter(
+      state.allUsers = state.allUsers.filter(
         (value) => value._id != action.payload
       );
-      console.log(state.Allusers);
+      console.log(state.allUsers);
     },
     editStatus: (state, action) => {
-      // state.Allusers=
-      // if()
-      const oneUser = state.Allusers.find(
+      const oneUser = state.allUsers.find(
         (value) => value._id == action.payload
       );
       if (oneUser.status == "active") {
@@ -75,9 +41,9 @@ const userSlice = createSlice({
       } else {
         oneUser.status = "active";
       }
-      state.Allusers.map((value, index) => {
+      state.allUsers.map((value, index) => {
         if (value._id == action.payload) {
-          state.Allusers[index] = oneUser;
+          state.allUsers[index] = oneUser;
         }
       });
     },
@@ -86,9 +52,20 @@ const userSlice = createSlice({
         (value) => value._id == action.payload._id
       );
       oneUser.status = action.payload.status;
-      state.Allusers.map((value, index) => {
+      state.allUsers.map((value, index) => {
         if (value._id == action.payload._id) {
-          state.Allusers[index] = oneUser;
+          state.allUsers[index] = oneUser;
+        }
+      });
+    },
+    editUserPoint: (state, action) => {
+      const oneUser = state.requests.find(
+        (value) => value._id == action.payload._id
+      );
+      oneUser.point = action.payload.point;
+      state.allUsers.map((value, index) => {
+        if (value._id == action.payload._id) {
+          state.allUsers[index] = oneUser;
         }
       });
     },
@@ -100,7 +77,7 @@ const userSlice = createSlice({
     },
     [addAllUsers.fulfilled]: (state, action) => {
       state.loading = false;
-      state.Allusers = action.payload;
+      state.allUsers = action.payload;
     },
     [getRequests.fulfilled]: (state, action) => {
       state.loading = false;
@@ -109,10 +86,6 @@ const userSlice = createSlice({
   },
 });
 
-export const {
-  // addInfo,
-  editAllUsers,
-  editStatus,
-  editRequestStatus,
-} = userSlice.actions;
+export const { editAllUsers, editStatus, editRequestStatus, editUserPoint } =
+  userSlice.actions;
 export default userSlice.reducer;

@@ -38,7 +38,7 @@ function UserDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const user = useSelector((state) => {
-    return state.user?.Allusers?.find((value) => value._id == id);
+    return state.user?.allUsers?.find((value) => value._id == id);
   });
   const [status, setStatus] = useState(user?.status);
   const dispatch = useDispatch();
@@ -47,6 +47,10 @@ function UserDetails() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const handleEditPoint = () => {
+    console.log("aa");
+    handleClose();
+  };
   const handleStatus = (statusReverse) => {
     Swal.fire({
       title: "Are you sure?",
@@ -239,7 +243,11 @@ function UserDetails() {
               type="number"
               fullWidth
             />
-            <Button onClick={handleClose} variant="contained" color="success">
+            <Button
+              onClick={handleEditPoint}
+              variant="contained"
+              color="success"
+            >
               Add
             </Button>
           </Box>

@@ -31,7 +31,7 @@ export default function App() {
     return state.user?.user;
   });
   const allUsers = useSelector((state) => {
-    return state.user?.Allusers;
+    return state.user?.allUsers;
   });
 
   const [mode, setMode] = React.useState(
