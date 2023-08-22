@@ -15,6 +15,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { addAllUsers, fetchUser, getRequests } from "./store/Slices/userSlice";
 import { useEffect } from "react";
 import jwt_decode from "jwt-decode";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
@@ -70,6 +72,7 @@ export default function App() {
 
   return (
     <>
+      <ToastContainer />
       <ThemeProvider theme={theme}>
         {location.pathname !== "/login" && (
           <Box sx={{ display: "flex" }}>
