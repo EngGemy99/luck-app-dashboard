@@ -51,8 +51,8 @@ const initialState = {
   },
   loading: false,
   error: null,
-  Allusers:[],
-  requests:[]
+  Allusers: [],
+  requests: []
 };
 
 const userSlice = createSlice({
@@ -60,24 +60,32 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     editAllUsers: (state, action) => {
-      state.Allusers= state.Allusers.filter(value=>value._id != action.payload)
+      state.Allusers = state.Allusers.filter(value => value._id != action.payload)
       console.log(state.Allusers)
     },
     editStatus: (state, action) => {
       // state.Allusers= 
       // if()
-      const oneUser=state.Allusers.find(value=>value._id == action.payload)
-      if (oneUser.status =="active")
-      {
-        oneUser.status="block"
-      }else{
-        oneUser.status="active"
+      const oneUser = state.Allusers.find(value => value._id == action.payload)
+      if (oneUser.status == "active") {
+        oneUser.status = "block"
+      } else {
+        oneUser.status = "active"
 
       }
-      state.Allusers.map((value,index)=>{
-        if(value._id == action.payload)
-        {
-          state.Allusers[index]=oneUser
+      state.Allusers.map((value, index) => {
+        if (value._id == action.payload) {
+          state.Allusers[index] = oneUser
+        }
+      })
+    },
+    editRequestStatus: (state, action) => {
+      const oneUser = state.requests.find(value => value._id == action.payload._id)
+
+      oneUser.status = action.payload.status
+      state.Allusers.map((value, index) => {
+        if (value._id == action.payload._id) {
+          state.Allusers[index] = oneUser
         }
       })
     },
@@ -89,11 +97,11 @@ const userSlice = createSlice({
     },
     [addAllUsers.fulfilled]: (state, action) => {
       state.loading = false;
-      state.Allusers =  action.payload ;
+      state.Allusers = action.payload;
     },
     [getRequests.fulfilled]: (state, action) => {
       state.loading = false;
-      state.requests =  action.payload ;
+      state.requests = action.payload;
     },
 
   },
@@ -102,6 +110,7 @@ const userSlice = createSlice({
 export const {
   // addInfo,
   editAllUsers,
-  editStatus
+  editStatus,
+  editRequestStatus
 } = userSlice.actions;
 export default userSlice.reducer;

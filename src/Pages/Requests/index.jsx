@@ -16,12 +16,26 @@ import Tab from "@mui/material/Tab";
 import PropTypes from "prop-types";
 import LukeApp from "../../Api/config";
 import { DataGrid } from "@mui/x-data-grid";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { PendingColumns, AcceptedColumns, RejectedColumns } from "./data";
+import { editRequestStatus } from "../../store/Slices/userSlice";
 function Requests() {
+  const dispatch=useDispatch()
   const requests = useSelector((state) => {
     return state.user?.requests;
   });
+
+  const changeStatus = async (requestID, status) => {
+    try {
+      await LukeApp.patch(`/request/${requestID}`, {
+        status,
+      });
+      dispatch(editRequestStatus({_id:requestID,status}))
+      
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const columns = [
     {
@@ -69,9 +83,8 @@ function Requests() {
       headerAlign: "center",
       valueGetter: (params) => {
         const dateObject = new Date(params.row.requestedAt);
-        const readableDate = `${
-          dateObject.getMonth() + 1
-        }/${dateObject.getDate()}/${dateObject.getFullYear()}`;
+        const readableDate = `${dateObject.getMonth() + 1
+          }/${dateObject.getDate()}/${dateObject.getFullYear()}`;
         return readableDate;
       },
     },
@@ -81,21 +94,38 @@ function Requests() {
       flex: 1,
       align: "center",
       headerAlign: "center",
-      renderCell: ({ row: { status } }) => {
+      renderCell: ({ row }) => {
         return (
           <Box
             sx={{
               display: "flex",
-              justifyContent: "space-evenly",
               alignItems: "center",
+              gap: 1
             }}
           >
-            <Button variant="contained" color="success">
-              Accept
-            </Button>
-            <Button variant="contained" color="error">
-              Reject
-            </Button>
+            {
+              row.status == "pending" && (<Button onClick={() => changeStatus(row._id, 'accepted')} variant="contained" color="success">
+                Accept
+              </Button>)
+            }
+
+            {
+              row.status == "pending" && (<Button onClick={() => changeStatus(row._id, 'rejected')} variant="contained" color="error">
+                Reject
+              </Button>)
+            }
+            {
+              row.status == "accepted" && (<Button  onClick={() => changeStatus(row._id, 'pending')} variant="contained" color="primary">
+                Track
+              </Button>)
+            }
+            {
+              row.status == "rejected" && (<Button onClick={() => changeStatus(row._id, 'pending')} variant="contained" color="primary">
+                Change To Pending
+              </Button>)
+            }
+
+
           </Box>
         );
       },
