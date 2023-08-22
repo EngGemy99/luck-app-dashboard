@@ -33,6 +33,7 @@ import DeviceHubIcon from "@mui/icons-material/DeviceHub";
 import BookOnlineIcon from "@mui/icons-material/BookOnline";
 
 import pic from "../assets/pic.jpg";
+import { useSelector } from "react-redux";
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -117,7 +118,8 @@ function SideBar({ open, handleDrawerClose }) {
   const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
-  const matches = useMediaQuery(theme.breakpoints.down("md")); // 'md' is 960px
+  const matches = useMediaQuery(theme.breakpoints.down("md"));
+  const { user } = useSelector((state) => state.user);
   React.useEffect(() => {
     if (matches && open) {
       handleDrawerClose();
@@ -137,7 +139,7 @@ function SideBar({ open, handleDrawerClose }) {
       </DrawerHeader>
       <Avatar
         alt="A"
-        src={pic}
+        src={user?.profilePic?.secure_url}
         sx={{
           mx: "auto",
           width: open ? "88px" : "40px",
@@ -150,7 +152,7 @@ function SideBar({ open, handleDrawerClose }) {
         sx={{ fontSize: open ? 17 : 0, transition: "0.25s " }}
         align="center"
       >
-        Ahmed Gamal
+        {user.userName}
       </Typography>
       <Typography
         sx={{

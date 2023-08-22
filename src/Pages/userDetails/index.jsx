@@ -12,15 +12,20 @@ import {
   Button,
   Divider,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Stack } from "@mui/system";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import LukeApp from "../../Api/config";
-import { editAllUsers, editStatus } from "../../store/Slices/userSlice";
+import {
+  editAllUsers,
+  editStatus,
+  editUserPoint,
+} from "../../store/Slices/userSlice";
 import Backdrop from "@mui/material/Backdrop";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
+import { ToastMessage } from "../../utils/ToastMessage";
 
 const style = {
   position: "absolute",
@@ -43,13 +48,31 @@ function UserDetails() {
   const [status, setStatus] = useState(user?.status);
   const dispatch = useDispatch();
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  const handleEditPoint = () => {
-    console.log("aa");
-    handleClose();
+  const [isLoading, setIsLoading] = useState(false);
+  const pointValue = useRef("");
+  const handleEditPoint = async () => {
+    if (pointValue.current.value === "") {
+      ToastMessage("error", "Please Enter a point value");
+    } else {
+      setIsLoading(true);
+      try {
+        await LukeApp.patch(`/admin/${user._id}/edit-point`, {
+          pointsChange: pointValue.current.value,
+        });
+        dispatch(editUserPoint({ id, point: pointValue.current.value }));
+        ToastMessage("success", "Edit point value successfully");
+        handleClose();
+      } catch (error) {
+        // ToastMessage("error", error.response.data[0]);
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
   };
   const handleStatus = (statusReverse) => {
     Swal.fire({
@@ -140,7 +163,7 @@ function UserDetails() {
               <TextField
                 label="User Name"
                 fullWidth
-                variant="outlined"
+                variant="filled"
                 disabled
                 value={user?.userName}
                 sx={{
@@ -150,7 +173,7 @@ function UserDetails() {
               <TextField
                 label="email"
                 fullWidth
-                variant="outlined"
+                variant="filled"
                 disabled
                 value={user?.email}
                 sx={{
@@ -160,7 +183,7 @@ function UserDetails() {
               <TextField
                 label="points"
                 fullWidth
-                variant="outlined"
+                variant="filled"
                 disabled
                 value={user?.points}
                 sx={{
@@ -233,6 +256,7 @@ function UserDetails() {
             </Typography>
             <Divider />
             <TextField
+              inputRef={pointValue}
               sx={{
                 my: 3,
               }}
@@ -247,8 +271,9 @@ function UserDetails() {
               onClick={handleEditPoint}
               variant="contained"
               color="success"
+              disabled={isLoading}
             >
-              Add
+              {isLoading ? "Loading..." : "Add"}
             </Button>
           </Box>
         </Fade>

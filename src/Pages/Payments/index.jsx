@@ -128,10 +128,12 @@ function Payments() {
                 Active OfferWalls
               </Typography>
               <Divider />
+
               {payment.map((item) => {
                 if (item.status == "active") {
                   return (
                     <Card key={item._id}
+
                       sx={{
                         p: 2,
                         mb: "1rem",
@@ -202,6 +204,7 @@ function Payments() {
                 Deactivated OfferWalls
               </Typography>
               <Divider />
+
               {payment.map((item) => {
                 if (item.status == "deactivate") {
                   return (
@@ -210,6 +213,7 @@ function Payments() {
                       sx={{
                         p: 2,
                         mb: "1rem",
+
                       }}
                     >
                       <Box
@@ -304,7 +308,7 @@ function Payments() {
                 color: "inherit",
               }}
             >
-              Add Top Offer
+              Add Payment Way
             </Button>
           </form>
         </Paper>

@@ -74,12 +74,11 @@ const userSlice = createSlice({
       });
     },
     editUserPoint: (state, action) => {
-      const oneUser = state.requests.find(
-        (value) => value._id == action.payload._id
-      );
-      oneUser.point = action.payload.point;
+      const { id, point } = action.payload;
+      const oneUser = state.allUsers.find((value) => value._id == id);
+      oneUser.points += +point;
       state.allUsers.map((value, index) => {
-        if (value._id == action.payload._id) {
+        if (value._id == id) {
           state.allUsers[index] = oneUser;
         }
       });

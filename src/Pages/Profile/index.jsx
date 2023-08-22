@@ -20,6 +20,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useSelector } from "react-redux";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import LukeApp from "../../Api/config";
+import { useEffect } from "react";
 function Profile() {
   const { user } = useSelector((state) => state.user);
   function CustomTabPanel(props) {
@@ -45,9 +46,16 @@ function Profile() {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     resolver: yupResolver(schema),
   });
+
+  useEffect(() => {
+    reset({
+      userName: user.userName,
+    });
+  }, [reset, user.userName]);
   const onSubmit = async (data) => {
     const { userName } = data;
     const formData = new FormData();
@@ -158,7 +166,7 @@ function Profile() {
                 error={errors.userName}
                 helperText={errors.userName?.message}
                 {...register("userName")}
-                label="Username"
+                label="userName"
                 fullWidth
                 variant="filled"
                 sx={{
