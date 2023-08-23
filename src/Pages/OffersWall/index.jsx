@@ -21,9 +21,10 @@ import { schema } from "./schema";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import LukeApp from "../../Api/config";
-import { editOfferStatus } from "../../store/Slices/userSlice";
+import { addOffersWall, editOfferStatus } from "../../store/Slices/userSlice";
+import { ToastMessage } from "../../utils/ToastMessage";
 function OffersWall() {
-  const dispatch =useDispatch()
+  const dispatch = useDispatch();
   const offers = useSelector((state) => {
     return state.user?.offers;
   });
@@ -92,20 +93,41 @@ function OffersWall() {
   }
 
   const [value, setValue] = React.useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("description", data.description);
+    formData.append("url", data.url);
+    formData.append("offerType", "offersWall");
+    if (data.image.length > 0) {
+      formData.append("image", data.image[0]);
+    }
+    setIsLoading(true);
+    try {
+      const res = await LukeApp.post(`offers/wall`, formData);
+      console.log(res);
+      ToastMessage("success", res.data.message);
+      dispatch(addOffersWall(res.data.newOfferWall));
+    } catch (error) {
+      console.log(error);
+      // ToastMessage("error", error.response.message);
+    } finally {
+      reset();
+      setIsLoading(false);
+    }
   };
   return (
     <>
@@ -132,7 +154,8 @@ function OffersWall() {
               {offers.map((item) => {
                 if (item.status == "active") {
                   return (
-                    <Card key={item._id}
+                    <Card
+                      key={item._id}
                       sx={{
                         p: 2,
                         mb: "1rem",
@@ -148,7 +171,7 @@ function OffersWall() {
                       >
                         <Avatar
                           sx={{
-                            height:"80px",
+                            height: "80px",
                             width: "80px",
                             borderRadius: "50%",
                           }}
@@ -187,12 +210,9 @@ function OffersWall() {
                         </Button>
                       </Box>
                     </Card>
-                  )
+                  );
                 }
-
-              }
-
-              )}
+              })}
             </Paper>
           </Grid>
 
@@ -225,7 +245,7 @@ function OffersWall() {
                       >
                         <Avatar
                           sx={{
-                            height:"80px",
+                            height: "80px",
                             width: "80px",
                             borderRadius: "50%",
                           }}
@@ -263,11 +283,9 @@ function OffersWall() {
                         </Button>
                       </Box>
                     </Card>
-                  )
+                  );
                 }
-              }
-
-              )}
+              })}
             </Paper>
           </Grid>
         </Grid>
@@ -316,6 +334,9 @@ function OffersWall() {
             />
             <br />
             <TextField
+              error={errors.image}
+              helperText={errors.image?.message}
+              {...register("image")}
               type="file"
               variant="outlined"
               fullWidth
@@ -331,8 +352,9 @@ function OffersWall() {
               sx={{
                 color: "inherit",
               }}
+              disabled={isLoading}
             >
-              Add Offer Wall
+              {isLoading ? "Loading..." : " Add Offer Wall"}
             </Button>
           </form>
         </Paper>
