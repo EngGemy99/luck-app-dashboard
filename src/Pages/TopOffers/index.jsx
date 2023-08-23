@@ -22,8 +22,9 @@ import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import LukeApp from "../../Api/config";
 import { editAllOfferStatus } from "../../store/Slices/userSlice";
+import { Link } from "react-router-dom";
 function TopOffers() {
-  const dispatch =useDispatch()
+  const dispatch = useDispatch()
   const topOffer = useSelector((state) => {
     return state.user?.topOffers;
   });
@@ -149,7 +150,7 @@ function TopOffers() {
                       >
                         <Avatar
                           sx={{
-                            height:"80px",
+                            height: "80px",
                             width: "80px",
                             borderRadius: "50%",
                           }}
@@ -183,9 +184,11 @@ function TopOffers() {
                         >
                           Deactivate
                         </Button>
-                        <Button variant="contained" color="primary">
-                          Edit
-                        </Button>
+                        <Link to={`/edit-offers-top/${item._id}`}>
+                          <Button variant="contained" color="primary">
+                            Edit
+                          </Button>
+                        </Link>
                       </Box>
                     </Card>
                   )
@@ -226,7 +229,7 @@ function TopOffers() {
                       >
                         <Avatar
                           sx={{
-                            height:"80px",
+                            height: "80px",
                             width: "80px",
                             borderRadius: "50%",
                           }}
@@ -259,9 +262,11 @@ function TopOffers() {
                         >
                           active
                         </Button>
-                        <Button variant="contained" color="primary">
-                          Edit
-                        </Button>
+                        <Link to={`/edit-offers-top/${item._id}`}>
+                          <Button variant="contained" color="primary">
+                            Edit
+                          </Button>
+                        </Link>
                       </Box>
                     </Card>
                   )

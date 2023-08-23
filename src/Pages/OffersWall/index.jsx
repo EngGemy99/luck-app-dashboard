@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import LukeApp from "../../Api/config";
 import { editOfferStatus } from "../../store/Slices/userSlice";
+import { Link } from "react-router-dom";
 function OffersWall() {
   const dispatch =useDispatch()
   const offers = useSelector((state) => {
@@ -182,9 +183,11 @@ function OffersWall() {
                         >
                           Deactivate
                         </Button>
-                        <Button variant="contained" color="primary">
-                          Edit
-                        </Button>
+                        <Link to={`/edit-offers/${item._id}`}>
+                          <Button variant="contained" color="primary">
+                            Edit
+                          </Button>
+                        </Link>
                       </Box>
                     </Card>
                   )
@@ -258,9 +261,11 @@ function OffersWall() {
                         >
                           active
                         </Button>
-                        <Button variant="contained" color="primary">
-                          Edit
-                        </Button>
+                        <Link to={`/edit-offers/${item._id}`}>
+                          <Button variant="contained" color="primary">
+                            Edit
+                          </Button>
+                        </Link>
                       </Box>
                     </Card>
                   )
