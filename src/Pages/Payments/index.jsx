@@ -22,9 +22,10 @@ import Swal from "sweetalert2";
 import LukeApp from "../../Api/config";
 import { useDispatch, useSelector } from "react-redux";
 import { editPaymentStatus } from "../../store/Slices/userSlice";
+import { Link } from "react-router-dom";
 function Payments() {
 
-  const dispatch =useDispatch()
+  const dispatch = useDispatch()
   const payment = useSelector((state) => {
     return state.user?.payments;
   });
@@ -147,7 +148,7 @@ function Payments() {
                       >
                         <Avatar
                           sx={{
-                            height:"80px",
+                            height: "80px",
                             width: "80px",
                             borderRadius: "50%",
                           }}
@@ -178,9 +179,11 @@ function Payments() {
                         >
                           Deactivate
                         </Button>
-                        <Button variant="contained" color="primary">
-                          Edit
-                        </Button>
+                        <Link to={`/edit-payments/${item._id}`}>
+                          <Button variant="contained" color="primary">
+                            Edit
+                          </Button>
+                        </Link>
                       </Box>
                     </Card>
                   )
@@ -221,7 +224,7 @@ function Payments() {
                       >
                         <Avatar
                           sx={{
-                            height:"80px",
+                            height: "80px",
                             width: "80px",
                             borderRadius: "50%",
                           }}
@@ -251,9 +254,11 @@ function Payments() {
                         >
                           active
                         </Button>
-                        <Button variant="contained" color="primary">
-                          Edit
-                        </Button>
+                        <Link to={`/edit-payments/${item._id}`}>
+                          <Button variant="contained" color="primary">
+                            Edit
+                          </Button>
+                        </Link>
                       </Box>
                     </Card>
                   )

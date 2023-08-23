@@ -23,6 +23,9 @@ import TabJoy from "./Pages/tabjoy/index.jsx";
 import IrounSource from "./Pages/irounSource/index.jsx";
 import Wannds from "./Pages/wannds/index.jsx";
 import PrivateRoute from "./utils/PrivateRoute.jsx";
+import Edit_Offers from "./Pages/OffersWall/Edit_Offers.jsx";
+import Edit_Top_Offers from "./Pages/TopOffers/Edit_Top_Offers.jsx";
+import Edit_Payments from "./Pages/Payments/Edit_Payments.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -113,6 +116,30 @@ const router = createBrowserRouter(
         element={
           <PrivateRoute>
             <Wannds />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="edit-offers-top/:id"
+        element={
+          <PrivateRoute>
+            <Edit_Top_Offers />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="edit-offers/:id"
+        element={
+          <PrivateRoute>
+            <Edit_Offers />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="edit-payments/:id"
+        element={
+          <PrivateRoute>
+            <Edit_Payments />
           </PrivateRoute>
         }
       />
