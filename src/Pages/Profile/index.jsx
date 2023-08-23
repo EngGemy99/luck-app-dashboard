@@ -21,6 +21,7 @@ import { useSelector } from "react-redux";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import LukeApp from "../../Api/config";
 import { useEffect } from "react";
+import { ToastMessage } from "../../utils/ToastMessage";
 function Profile() {
   const { user } = useSelector((state) => state.user);
   function CustomTabPanel(props) {
@@ -59,12 +60,14 @@ function Profile() {
   const onSubmit = async (data) => {
     const { userName } = data;
     const formData = new FormData();
-    formData.append("userName", userName);
+    if (user.userName != userName) {
+      formData.append("userName", userName);
+    }
     if (imageFile) {
       formData.append("image", imageFile);
     }
     const res = await LukeApp.patch(`admin/profile`, formData);
-    console.log(res.data);
+    ToastMessage("success", res.data.message);
   };
   CustomTabPanel.propTypes = {
     children: PropTypes.node,

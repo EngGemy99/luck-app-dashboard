@@ -116,6 +116,12 @@ const userSlice = createSlice({
         }
       });
     },
+    addOffersWall: (state, action) => {
+      state.offers.push(action.payload);
+    },
+    addTopOffers: (state, action) => {
+      state.topOffers.push(action.payload);
+    },
   },
   extraReducers: {
     [fetchUser.fulfilled]: (state, action) => {
@@ -139,6 +145,15 @@ const userSlice = createSlice({
   },
 });
 
-export const { editAllUsers, editStatus, editRequestStatus, editUserPoint, editOfferStatus, editAllOfferStatus, editPaymentStatus } =
-  userSlice.actions;
+export const {
+  editAllUsers,
+  editStatus,
+  editRequestStatus,
+  editUserPoint,
+  editOfferStatus,
+  editAllOfferStatus,
+  editPaymentStatus,
+  addOffersWall,
+  addTopOffers,
+} = userSlice.actions;
 export default userSlice.reducer;

@@ -21,10 +21,12 @@ import { schema } from "./schema";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import LukeApp from "../../Api/config";
-import { editAllOfferStatus } from "../../store/Slices/userSlice";
+import { ToastMessage } from "../../utils/ToastMessage";
+import { addTopOffers, editAllOfferStatus } from "../../store/Slices/userSlice";
 import { Link } from "react-router-dom";
 function TopOffers() {
   const dispatch = useDispatch()
+
   const topOffer = useSelector((state) => {
     return state.user?.topOffers;
   });
@@ -93,7 +95,8 @@ function TopOffers() {
     };
   }
 
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -102,12 +105,34 @@ function TopOffers() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("description", data.description);
+    formData.append("url", data.url);
+    formData.append("point", data.point);
+    formData.append("offerType", "topOffer");
+    if (data.image.length > 0) {
+      formData.append("image", data.image[0]);
+    }
+    setIsLoading(true);
+    try {
+      const res = await LukeApp.post(`offers/top`, formData);
+      console.log(res);
+      ToastMessage("success", res.data.message);
+      dispatch(addTopOffers(res.data.newTopOffer));
+    } catch (error) {
+      console.log(error);
+      // ToastMessage("error", error.response.message);
+    } finally {
+      reset();
+      setIsLoading(false);
+    }
   };
   return (
     <>
@@ -134,7 +159,8 @@ function TopOffers() {
               {topOffer.map((item) => {
                 if (item.status == "active") {
                   return (
-                    <Card key={item._id}
+                    <Card
+                      key={item._id}
                       sx={{
                         p: 2,
                         mb: "1rem",
@@ -191,12 +217,9 @@ function TopOffers() {
                         </Link>
                       </Box>
                     </Card>
-                  )
+                  );
                 }
-
-              }
-
-              )}
+              })}
             </Paper>
           </Grid>
 
@@ -269,11 +292,9 @@ function TopOffers() {
                         </Link>
                       </Box>
                     </Card>
-                  )
+                  );
                 }
-              }
-
-              )}
+              })}
             </Paper>
           </Grid>
         </Grid>
@@ -334,6 +355,9 @@ function TopOffers() {
             />
             <br />
             <TextField
+              error={errors.image}
+              helperText={errors.image?.message}
+              {...register("image")}
               type="file"
               variant="outlined"
               fullWidth
@@ -349,8 +373,9 @@ function TopOffers() {
               sx={{
                 color: "inherit",
               }}
+              disabled={isLoading}
             >
-              Add Top Offer
+              {isLoading ? "Loading..." : "Add Top Offer"}
             </Button>
           </form>
         </Paper>
