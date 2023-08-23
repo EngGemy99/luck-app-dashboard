@@ -23,8 +23,10 @@ import Swal from "sweetalert2";
 import LukeApp from "../../Api/config";
 import { ToastMessage } from "../../utils/ToastMessage";
 import { addTopOffers, editAllOfferStatus } from "../../store/Slices/userSlice";
+import { Link } from "react-router-dom";
 function TopOffers() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
+
   const topOffer = useSelector((state) => {
     return state.user?.topOffers;
   });
@@ -208,9 +210,11 @@ function TopOffers() {
                         >
                           Deactivate
                         </Button>
-                        <Button variant="contained" color="primary">
-                          Edit
-                        </Button>
+                        <Link to={`/edit-offers-top/${item._id}`}>
+                          <Button variant="contained" color="primary">
+                            Edit
+                          </Button>
+                        </Link>
                       </Box>
                     </Card>
                   );
@@ -281,9 +285,11 @@ function TopOffers() {
                         >
                           active
                         </Button>
-                        <Button variant="contained" color="primary">
-                          Edit
-                        </Button>
+                        <Link to={`/edit-offers-top/${item._id}`}>
+                          <Button variant="contained" color="primary">
+                            Edit
+                          </Button>
+                        </Link>
                       </Box>
                     </Card>
                   );
