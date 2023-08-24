@@ -6,7 +6,6 @@ import LukeApp from "../../Api/config";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addAllUsers } from "../../store/Slices/userSlice";
-// import { columns } from "./data";
 function Team() {
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -21,6 +20,7 @@ function Team() {
       flex: 1,
       align: "center",
       headerAlign: "center",
+      width: 120,
     },
     {
       field: "email",
@@ -28,6 +28,7 @@ function Team() {
       flex: 1,
       align: "center",
       headerAlign: "center",
+      width: 120,
     },
     {
       field: "points",
@@ -35,6 +36,7 @@ function Team() {
       flex: 1,
       align: "center",
       headerAlign: "center",
+      width: 80,
     },
     {
       field: "status",
@@ -42,6 +44,7 @@ function Team() {
       flex: 1,
       align: "center",
       headerAlign: "center",
+      width: 100,
       renderCell: ({ row: { status } }) => {
         return (
           <Box
@@ -118,7 +121,7 @@ function Team() {
   }, []);
 
   return (
-    <Box sx={{ height: 650, width: "98%" }}>
+    <Box sx={{ height: 650, width: "100%" }}>
       <DataGrid
         rows={allUsers}
         columns={columns}

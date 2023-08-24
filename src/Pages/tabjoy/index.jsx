@@ -3,17 +3,32 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "./schema";
+import LukeApp from "../../Api/config";
+import { ToastMessage } from "../../utils/ToastMessage";
+import { useState } from "react";
 
 function TabJoy() {
+  const [isLoading, setIsLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    setIsLoading(true);
+    try {
+      const res = await LukeApp.post(`tab-joy`, data);
+      ToastMessage("success", res.data.message);
+    } catch (error) {
+      ToastMessage("error", error.response.data.error);
+    } finally {
+      reset();
+      setIsLoading(false);
+    }
   };
   return (
     <div>
@@ -48,8 +63,9 @@ function TabJoy() {
           sx={{
             color: "inherit",
           }}
+          disabled={isLoading}
         >
-          Add
+          {isLoading ? "Loading..." : "Add"}
         </Button>
       </form>
     </div>

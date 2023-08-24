@@ -11,6 +11,7 @@ const Card = ({ icon, title, subTitle, increase, data, scheme }) => {
         p: 1.5,
         display: "flex",
         justifyContent: "space-between",
+        overflow: "hidden",
       }}
     >
       <Stack gap={1}>
