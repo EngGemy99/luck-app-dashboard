@@ -27,6 +27,7 @@ import PrivateRoute from "./utils/PrivateRoute.jsx";
 import Edit_Offers from "./Pages/OffersWall/Edit_Offers.jsx";
 import Edit_Top_Offers from "./Pages/TopOffers/Edit_Top_Offers.jsx";
 import Edit_Payments from "./Pages/Payments/Edit_Payments.jsx";
+import EditVideo from "./Pages/video/EditVideo.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -149,6 +150,14 @@ const router = createBrowserRouter(
         element={
           <PrivateRoute>
             <Edit_Payments />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="edit-video/:id"
+        element={
+          <PrivateRoute>
+            <EditVideo />
           </PrivateRoute>
         }
       />
