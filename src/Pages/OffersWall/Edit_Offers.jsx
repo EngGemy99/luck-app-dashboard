@@ -3,11 +3,18 @@ import { Button, Paper, TextField } from "@mui/material"
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { schema } from "./schema";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import LukeApp from "../../Api/config";
+import { ToastMessage } from "../../utils/ToastMessage";
+import { addOffersWall } from "../../store/Slices/userSlice";
+import { useEffect } from "react";
 
 function Edit_Offers() {
-    const {id} = useParams()
+    const [value, setValue] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
+    const { id } = useParams()
+    const dispatch =useDispatch()
     const offer = useSelector((state) => {
         return state.user?.offers.find(value => value._id == id);
     });
@@ -15,13 +22,42 @@ function Edit_Offers() {
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors },
     } = useForm({
         resolver: yupResolver(schema),
     });
-    const onSubmit = (data) => {
-        console.log(data);
+    const onSubmit = async (data) => {
+        const formData = new FormData();
+        formData.append("title", data.title);
+        formData.append("description", data.description);
+        formData.append("url", data.url);
+        // formData.append("offerType", "offersWall");
+        if (data.image.length > 0) {
+            formData.append("image", data.image[0]);
+        }
+        setIsLoading(true);
+        try {
+            const res = await LukeApp.post(`offers/wall`, formData);
+            console.log(res);
+            ToastMessage("success", res.data.message);
+            dispatch(addOffersWall(res.data.newOfferWall));
+        } catch (error) {
+            console.log(error);
+            // ToastMessage("error", error.response.message);
+        } finally {
+            reset();
+            setIsLoading(false);
+        }
     };
+
+    useEffect(() => {
+        reset({
+            title: offer?.title,
+            url: offer?.url,
+            description: offer?.description,
+        });
+    }, [reset, offer?.title, offer?.url, offer?.description]);
     return (
         <Paper
             sx={{
@@ -35,7 +71,7 @@ function Edit_Offers() {
                     helperText={errors.title?.message}
                     {...register("title")}
                     focused
-                    value={offer?.title}
+                    defaultValue={offer?.title}
                     fullWidth
                     variant="outlined"
                     sx={{
@@ -49,7 +85,7 @@ function Edit_Offers() {
                     helperText={errors.description?.message}
                     {...register("description")}
                     focused
-                    value={offer?.description}
+                    defaultValue={offer?.description}
                     variant="outlined"
                     fullWidth
                     sx={{
@@ -62,7 +98,7 @@ function Edit_Offers() {
                     helperText={errors.url?.message}
                     {...register("url")}
                     label="url"
-                    value={offer?.url}
+                    defaultValue={offer?.url}
                     variant="outlined"
                     fullWidth
                     focused
