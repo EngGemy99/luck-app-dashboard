@@ -122,6 +122,27 @@ const userSlice = createSlice({
     addTopOffers: (state, action) => {
       state.topOffers.push(action.payload);
     },
+    editOffor: (state, action) => {
+      state.offers.map((value, index) => {
+        if (value._id == action.payload._id) {
+          state.offers[index] = action.payload.data;
+        }
+      });
+    },
+    editPayment: (state, action) => {
+      state.payments.map((value, index) => {
+        if (value._id == action.payload._id) {
+          state.payments[index] = action.payload.data;
+        }
+      });
+    },
+    editTopOffer: (state, action) => {
+      state.topOffers.map((value, index) => {
+        if (value._id == action.payload._id) {
+          state.topOffers[index] = action.payload.data;
+        }
+      });
+    }
   },
   extraReducers: {
     [fetchUser.fulfilled]: (state, action) => {
@@ -155,5 +176,8 @@ export const {
   editPaymentStatus,
   addOffersWall,
   addTopOffers,
+  editPayment,
+  editOffor,
+  editTopOffer,
 } = userSlice.actions;
 export default userSlice.reducer;

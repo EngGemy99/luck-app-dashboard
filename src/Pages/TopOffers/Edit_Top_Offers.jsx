@@ -1,26 +1,64 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, Paper, TextField } from "@mui/material"
 import { useForm } from "react-hook-form";
-import { schema } from "./schema";
-import { useSelector } from "react-redux";
+import { editSchema, schema } from "./schema";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { ToastMessage } from "../../utils/ToastMessage";
+import { useEffect, useState } from "react";
+import { editTopOffer } from "../../store/Slices/userSlice";
+import LukeApp from "../../Api/config";
 
 function Edit_Top_Offers() {
     const { id } = useParams()
-    const offer = useSelector((state) => {
+    const [isLoading, setIsLoading] = useState(false);
+    const topOffer = useSelector((state) => {
         return state.user?.topOffers.find(value => value._id == id);
     });
 
+
+    const dispatch =useDispatch()
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors },
     } = useForm({
-        resolver: yupResolver(schema),
+        resolver: yupResolver(editSchema),
     });
-    const onSubmit = (data) => {
-        console.log(data);
+    const onSubmit = async (data) => {
+        const formData = new FormData();
+        formData.append("title", data.title);
+        formData.append("point", data.point);
+        formData.append("url", data.url);
+        formData.append("description", data.description);
+        // formData.append("offerType", "offersWall");
+        if (data?.image?.length > 0) {
+            formData.append("image", data.image[0]);
+        }
+        setIsLoading(true);
+        try {
+            const res = await LukeApp.patch(`offers/top/${id}`, formData);
+            ToastMessage("success", res.data.message);
+            dispatch(editTopOffer({_id:id,data:res.data.result}));
+        } catch (error) {
+            console.log(error);
+            ToastMessage("error", error.response.message);
+        } finally {
+            reset();
+            setIsLoading(false);
+        }
     };
+
+    useEffect(() => {
+        reset({
+            description: topOffer?.description,
+            url: topOffer?.url,
+            point: topOffer?.point,
+            title: topOffer?.title,
+        });
+    }, [reset, topOffer?.description, topOffer?.point, topOffer?.title, topOffer?.url]);
+
     return (
         <Paper
             sx={{
@@ -35,7 +73,7 @@ function Edit_Top_Offers() {
                     {...register("title")}
                     fullWidth
                     focused
-                    value={offer?.title}
+                    defaultValue={topOffer?.title}
                     variant="outlined"
                     sx={{
                         mb: 3,
@@ -50,7 +88,7 @@ function Edit_Top_Offers() {
                     variant="outlined"
                     fullWidth
                     focused
-                    value={offer?.description}
+                    defaultValue={topOffer?.description}
                     sx={{
                         mb: 3,
                     }}
@@ -64,7 +102,7 @@ function Edit_Top_Offers() {
                     variant="outlined"
                     fullWidth
                     focused
-                    value={offer?.url}
+                    defaultValue={topOffer?.url}
                     sx={{
                         mb: 3,
                     }}
@@ -78,7 +116,7 @@ function Edit_Top_Offers() {
                     variant="outlined"
                     fullWidth
                     focused
-                    value={offer?.point}
+                    defaultValue={topOffer?.point}
                     sx={{
                         mb: 3,
                     }}
