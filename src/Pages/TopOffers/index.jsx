@@ -25,7 +25,7 @@ import { ToastMessage } from "../../utils/ToastMessage";
 import { addTopOffers, editAllOfferStatus } from "../../store/Slices/userSlice";
 import { Link } from "react-router-dom";
 function TopOffers() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const topOffer = useSelector((state) => {
     return state.user?.topOffers;
@@ -123,12 +123,10 @@ function TopOffers() {
     setIsLoading(true);
     try {
       const res = await LukeApp.post(`offers/top`, formData);
-      console.log(res);
       ToastMessage("success", res.data.message);
       dispatch(addTopOffers(res.data.newTopOffer));
     } catch (error) {
-      console.log(error);
-      // ToastMessage("error", error.response.message);
+      ToastMessage("error", error.response.data.error);
     } finally {
       reset();
       setIsLoading(false);

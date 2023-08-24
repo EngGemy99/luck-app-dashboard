@@ -29,6 +29,8 @@ import {
   SettingsOutlined,
 } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
+import userSlice from "../store/Slices/userSlice";
+import { useSelector } from "react-redux";
 const drawerWidth = 240;
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
@@ -90,6 +92,7 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
 function TopBar({ open, handleDrawerOpen, setMode }) {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const openMenu = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -201,7 +204,7 @@ function TopBar({ open, handleDrawerOpen, setMode }) {
               }}
             >
               <MenuItem onClick={handleClose}>
-                <Avatar /> Profile
+                <Avatar src={user?.profilePic?.secure_url} /> Profile
               </MenuItem>
             </Link>
             <Divider />

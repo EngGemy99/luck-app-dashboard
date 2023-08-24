@@ -22,9 +22,8 @@ const DashboardPage = () => {
           subTitle={"Welcome to your dashboard"}
         />
       </Stack>
-
       <Row1 />
-      {/* <Row2 /> */}
+      <Row2 />
     </Box>
   );
 };
