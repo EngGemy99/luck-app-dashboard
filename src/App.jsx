@@ -12,7 +12,15 @@ import TopBar from "./Components/TopBar";
 import { getDesignTokens } from "./theme";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addAllUsers, fetchUser, getOffers, getPayments, getRequests, getTopOffers } from "./store/Slices/userSlice";
+import {
+  addAllUsers,
+  fetchUser,
+  getOffers,
+  getPayments,
+  getRequests,
+  getTopOffers,
+  getVideos,
+} from "./store/Slices/userSlice";
 import { useEffect } from "react";
 import jwt_decode from "jwt-decode";
 import { ToastContainer } from "react-toastify";
@@ -68,6 +76,7 @@ export default function App() {
       dispatch(getOffers());
       dispatch(getTopOffers());
       dispatch(getPayments());
+      dispatch(getVideos());
     }
   }, [dispatch, user._id]);
 
