@@ -159,6 +159,14 @@ const userSlice = createSlice({
         }
       });
     },
+    editVideo: (state, action) => {
+      console.log(action.payload.data)
+      state.videos.map((value, index) => {
+        if (value._id == action.payload._id) {
+          state.videos[index] = action.payload.data;
+        }
+      });
+    },
     addPayment: (state, action) => {
       state.payments.push(action.payload);
     },
@@ -208,5 +216,6 @@ export const {
   addPayment,
   editVideoStatus,
   addVideo,
+  editVideo,
 } = userSlice.actions;
 export default userSlice.reducer;

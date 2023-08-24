@@ -206,7 +206,7 @@ function Video() {
                         >
                           Deactivate
                         </Button>
-                        <Link to={`/edit-offers/${item._id}`}>
+                        <Link to={`/edit-video/${item._id}`}>
                           <Button variant="contained" color="primary">
                             Edit
                           </Button>
