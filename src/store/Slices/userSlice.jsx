@@ -142,7 +142,7 @@ const userSlice = createSlice({
           state.topOffers[index] = action.payload.data;
         }
       });
-    }
+    },
     addPayment: (state, action) => {
       state.payments.push(action.payload);
     },
