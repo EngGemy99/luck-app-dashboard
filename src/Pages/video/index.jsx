@@ -25,11 +25,12 @@ import LukeApp from "../../Api/config";
 import { ToastMessage } from "../../utils/ToastMessage";
 
 import { Link } from "react-router-dom";
+import { addVideo, editVideoStatus } from "../../store/Slices/userSlice";
 
 function Video() {
   const dispatch = useDispatch();
-  const offers = useSelector((state) => {
-    return state.user?.offers;
+  const { videos } = useSelector((state) => {
+    return state.user;
   });
   function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -62,10 +63,10 @@ function Video() {
           confirmButtonText: "Yes",
         });
         if (result.isConfirmed) {
-          await LukeApp.patch(`/offers/wall/${requestID}`, {
+          await LukeApp.patch(`/video/${requestID}`, {
             status,
           });
-          dispatch(editOfferStatus({ _id: requestID, status }));
+          dispatch(editVideoStatus({ _id: requestID, status }));
           await Swal.fire(
             "Deactivated!",
             "Your offer wall has been Deactivated.",
@@ -73,10 +74,10 @@ function Video() {
           );
         }
       } else {
-        await LukeApp.patch(`/offers/wall/${requestID}`, {
+        await LukeApp.patch(`/video/${requestID}`, {
           status,
         });
-        dispatch(editOfferStatus({ _id: requestID, status }));
+        dispatch(editVideoStatus({ _id: requestID, status }));
       }
     } catch (error) {
       console.log(error);
@@ -95,7 +96,7 @@ function Video() {
     };
   }
 
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (event, newValue) => {
@@ -114,15 +115,14 @@ function Video() {
     formData.append("title", data.title);
     formData.append("description", data.description);
     formData.append("url", data.url);
-    formData.append("offerType", "offersWall");
     if (data.image.length > 0) {
       formData.append("image", data.image[0]);
     }
     setIsLoading(true);
     try {
-      const res = await LukeApp.post(`offers/wall`, formData);
+      const res = await LukeApp.post(`video`, formData);
       ToastMessage("success", res.data.message);
-      dispatch(addOffersWall(res.data.newOfferWall));
+      dispatch(addVideo(res.data.video));
     } catch (error) {
       ToastMessage("error", error.response.data.error);
     } finally {
@@ -137,8 +137,8 @@ function Video() {
         onChange={handleChange}
         aria-label="basic tabs example"
       >
-        <Tab label="All Offers Wall" {...a11yProps(0)} />
-        <Tab label="Add Offer Wall" {...a11yProps(1)} />
+        <Tab label="All Videos" {...a11yProps(0)} />
+        <Tab label="Add Video" {...a11yProps(1)} />
       </Tabs>
       <CustomTabPanel value={value} index={0}>
         <Grid container spacing={2}>
@@ -149,10 +149,10 @@ function Video() {
               }}
             >
               <Typography variant="h5" color="inherit">
-                Active OfferWalls
+                Active Videos
               </Typography>
               <Divider />
-              {offers.map((item) => {
+              {videos.map((item) => {
                 if (item.status == "active") {
                   return (
                     <Card
@@ -226,10 +226,10 @@ function Video() {
               }}
             >
               <Typography variant="h5" color="inherit">
-                Deactivated OfferWalls
+                Deactivated Videos
               </Typography>
               <Divider />
-              {offers.map((item) => {
+              {videos.map((item) => {
                 if (item.status == "deactivate") {
                   return (
                     <Card
@@ -359,7 +359,7 @@ function Video() {
               }}
               disabled={isLoading}
             >
-              {isLoading ? "Loading..." : " Add Offer Wall"}
+              {isLoading ? "Loading..." : " Add Video"}
             </Button>
           </form>
         </Paper>

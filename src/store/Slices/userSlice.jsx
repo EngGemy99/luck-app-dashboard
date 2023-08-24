@@ -25,6 +25,10 @@ export const getPayments = createAsyncThunk("user/payments", async () => {
   const { data } = await LukeApp.get(`/payment`);
   return data.paymentWays;
 });
+export const getVideos = createAsyncThunk("user/videos", async () => {
+  const { data } = await LukeApp.get(`/video`);
+  return data.videos;
+});
 
 const initialState = {
   user: {
@@ -35,6 +39,7 @@ const initialState = {
   offers: [],
   topOffers: [],
   payments: [],
+  videos: [],
 };
 
 const userSlice = createSlice({
@@ -94,6 +99,17 @@ const userSlice = createSlice({
         }
       });
     },
+    editVideoStatus: (state, action) => {
+      const oneUser = state.videos.find(
+        (value) => value._id == action.payload._id
+      );
+      oneUser.status = action.payload.status;
+      state.videos.map((value, index) => {
+        if (value._id == action.payload._id) {
+          state.videos[index] = oneUser;
+        }
+      });
+    },
     editAllOfferStatus: (state, action) => {
       const oneUser = state.topOffers.find(
         (value) => value._id == action.payload._id
@@ -146,6 +162,10 @@ const userSlice = createSlice({
     addPayment: (state, action) => {
       state.payments.push(action.payload);
     },
+    addVideo: (state, action) => {
+      console.log(action.payload);
+      state.videos.push(action.payload);
+    },
   },
   extraReducers: {
     [fetchUser.fulfilled]: (state, action) => {
@@ -166,6 +186,9 @@ const userSlice = createSlice({
     [getPayments.fulfilled]: (state, action) => {
       state.payments = action.payload;
     },
+    [getVideos.fulfilled]: (state, action) => {
+      state.videos = action.payload;
+    },
   },
 });
 
@@ -183,5 +206,7 @@ export const {
   editTopOffer,
   editPaymentStatus,
   addPayment,
+  editVideoStatus,
+  addVideo,
 } = userSlice.actions;
 export default userSlice.reducer;
