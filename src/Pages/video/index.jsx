@@ -22,12 +22,11 @@ import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import LukeApp from "../../Api/config";
 
-import { addOffersWall, editOfferStatus } from "../../store/Slices/userSlice";
 import { ToastMessage } from "../../utils/ToastMessage";
 
 import { Link } from "react-router-dom";
 
-function OffersWall() {
+function Video() {
   const dispatch = useDispatch();
   const offers = useSelector((state) => {
     return state.user?.offers;
@@ -369,4 +368,4 @@ function OffersWall() {
   );
 }
 
-export default OffersWall;
+export default Video;

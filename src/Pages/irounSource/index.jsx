@@ -3,17 +3,32 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "./schema";
+import LukeApp from "../../Api/config";
+import { ToastMessage } from "../../utils/ToastMessage";
+import { useState } from "react";
 
 function IrounSource() {
+  const [isLoading, setIsLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    setIsLoading(true);
+    try {
+      const res = await LukeApp.post(`iroun-source`, data);
+      ToastMessage("success", res.data.message);
+    } catch (error) {
+      ToastMessage("error", error.response.data.error);
+    } finally {
+      reset();
+      setIsLoading(false);
+    }
   };
   return (
     <div>
@@ -37,8 +52,9 @@ function IrounSource() {
           sx={{
             color: "inherit",
           }}
+          disabled={isLoading}
         >
-          Add
+          {isLoading ? "Loading..." : "Add"}
         </Button>
       </form>
     </div>

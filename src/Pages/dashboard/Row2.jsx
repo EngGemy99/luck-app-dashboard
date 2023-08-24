@@ -47,7 +47,7 @@ const Row2 = () => {
               </IconButton>
             </Box>
           </Stack>
-          <LineChartComponent isDahboard={true} />
+          <LineChartComponent />
         </Paper>
       </Grid>
     </Grid>

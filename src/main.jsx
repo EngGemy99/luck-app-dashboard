@@ -22,6 +22,7 @@ import Payments from "./Pages/Payments/index.jsx";
 import TabJoy from "./Pages/tabjoy/index.jsx";
 import IrounSource from "./Pages/irounSource/index.jsx";
 import Wannds from "./Pages/wannds/index.jsx";
+import Video from "./Pages/Video/index.jsx";
 import PrivateRoute from "./utils/PrivateRoute.jsx";
 import Edit_Offers from "./Pages/OffersWall/Edit_Offers.jsx";
 import Edit_Top_Offers from "./Pages/TopOffers/Edit_Top_Offers.jsx";
@@ -84,6 +85,14 @@ const router = createBrowserRouter(
         element={
           <PrivateRoute>
             <TopOffers />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="video"
+        element={
+          <PrivateRoute>
+            <Video />
           </PrivateRoute>
         }
       />

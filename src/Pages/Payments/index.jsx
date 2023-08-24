@@ -21,11 +21,11 @@ import { schema } from "./schema";
 import Swal from "sweetalert2";
 import LukeApp from "../../Api/config";
 import { useDispatch, useSelector } from "react-redux";
-import { editPaymentStatus } from "../../store/Slices/userSlice";
+import { editPaymentStatus, addPayment } from "../../store/Slices/userSlice";
 import { Link } from "react-router-dom";
+import { ToastMessage } from "../../utils/ToastMessage";
 function Payments() {
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const payment = useSelector((state) => {
     return state.user?.payments;
   });
@@ -94,18 +94,36 @@ function Payments() {
     };
   }
   const [value, setValue] = React.useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    const formData = new FormData();
+    formData.append("paymentName", data.paymentName);
+    if (data.paymentImage.length > 0) {
+      formData.append("paymentImage", data.paymentImage[0]);
+    }
+    setIsLoading(true);
+    try {
+      const res = await LukeApp.post(`payment`, formData);
+      ToastMessage("success", res.data.message);
+      dispatch(addPayment(res.data.result));
+    } catch (error) {
+      ToastMessage("error", error.response.data.error);
+    } finally {
+      reset();
+      setIsLoading(false);
+    }
   };
   return (
     <>
@@ -133,8 +151,8 @@ function Payments() {
               {payment.map((item) => {
                 if (item.status == "active") {
                   return (
-                    <Card key={item._id}
-
+                    <Card
+                      key={item._id}
                       sx={{
                         p: 2,
                         mb: "1rem",
@@ -161,7 +179,9 @@ function Payments() {
                             flexShrink: 1,
                           }}
                         >
-                          <Typography variant="body1">{item.paymentName}</Typography>
+                          <Typography variant="body1">
+                            {item.paymentName}
+                          </Typography>
                         </CardContent>
                       </Box>
                       <Box
@@ -188,12 +208,9 @@ function Payments() {
                         </Link>
                       </Box>
                     </Card>
-                  )
+                  );
                 }
-
-              }
-
-              )}
+              })}
             </Paper>
           </Grid>
 
@@ -216,7 +233,6 @@ function Payments() {
                       sx={{
                         p: 2,
                         mb: "1rem",
-
                       }}
                     >
                       <Box
@@ -239,7 +255,9 @@ function Payments() {
                             flexShrink: 1,
                           }}
                         >
-                          <Typography variant="body1">{item.paymentName}</Typography>
+                          <Typography variant="body1">
+                            {item.paymentName}
+                          </Typography>
                         </CardContent>
                       </Box>
                       <Box
@@ -265,11 +283,9 @@ function Payments() {
                         </Link>
                       </Box>
                     </Card>
-                  )
+                  );
                 }
-              }
-
-              )}
+              })}
             </Paper>
           </Grid>
         </Grid>
@@ -294,16 +310,17 @@ function Payments() {
             />
             <br />
             <TextField
+              error={errors.paymentImage}
+              helperText={errors.paymentImage?.message}
+              {...register("paymentImage")}
               type="file"
-              error={errors.image}
-              helperText={errors.image?.message}
-              {...register("image")}
               variant="outlined"
               fullWidth
               sx={{
                 mb: 3,
               }}
             />
+            <br />
             <br />
             <Button
               variant="contained"
@@ -312,8 +329,9 @@ function Payments() {
               sx={{
                 color: "inherit",
               }}
+              disabled={isLoading}
             >
-              Add Payment Way
+              {isLoading ? "Loading..." : "Add Payment Way"}
             </Button>
           </form>
         </Paper>

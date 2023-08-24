@@ -31,6 +31,7 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import AodIcon from "@mui/icons-material/Aod";
 import DeviceHubIcon from "@mui/icons-material/DeviceHub";
 import BookOnlineIcon from "@mui/icons-material/BookOnline";
+import OndemandVideoIcon from "@mui/icons-material/OndemandVideo";
 
 import pic from "../assets/pic.jpg";
 import { useSelector } from "react-redux";
@@ -97,6 +98,11 @@ const ListOne = [
     text: "Top Offers",
     icon: <LocalOfferIcon />,
     path: "/top-offers",
+  },
+  {
+    text: "Video",
+    icon: <OndemandVideoIcon />,
+    path: "/video",
   },
 ];
 const ListTwo = [
