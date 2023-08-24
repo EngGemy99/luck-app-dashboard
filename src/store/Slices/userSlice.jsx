@@ -122,6 +122,27 @@ const userSlice = createSlice({
     addTopOffers: (state, action) => {
       state.topOffers.push(action.payload);
     },
+    editOffor: (state, action) => {
+      state.offers.map((value, index) => {
+        if (value._id == action.payload._id) {
+          state.offers[index] = action.payload.data;
+        }
+      });
+    },
+    editPayment: (state, action) => {
+      state.payments.map((value, index) => {
+        if (value._id == action.payload._id) {
+          state.payments[index] = action.payload.data;
+        }
+      });
+    },
+    editTopOffer: (state, action) => {
+      state.topOffers.map((value, index) => {
+        if (value._id == action.payload._id) {
+          state.topOffers[index] = action.payload.data;
+        }
+      });
+    }
     addPayment: (state, action) => {
       state.payments.push(action.payload);
     },
@@ -157,6 +178,9 @@ export const {
   editAllOfferStatus,
   addOffersWall,
   addTopOffers,
+  editPayment,
+  editOffor,
+  editTopOffer,
   editPaymentStatus,
   addPayment,
 } = userSlice.actions;

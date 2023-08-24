@@ -2,12 +2,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, Paper, TextField } from "@mui/material"
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { schema } from "./schema";
+import { editSchema, schema } from "./schema";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import LukeApp from "../../Api/config";
 import { ToastMessage } from "../../utils/ToastMessage";
-import { addOffersWall } from "../../store/Slices/userSlice";
+import { addOffersWall, editOffor } from "../../store/Slices/userSlice";
 import { useEffect } from "react";
 
 function Edit_Offers() {
@@ -25,7 +25,7 @@ function Edit_Offers() {
         reset,
         formState: { errors },
     } = useForm({
-        resolver: yupResolver(schema),
+        resolver: yupResolver(editSchema),
     });
     const onSubmit = async (data) => {
         const formData = new FormData();
@@ -33,18 +33,18 @@ function Edit_Offers() {
         formData.append("description", data.description);
         formData.append("url", data.url);
         // formData.append("offerType", "offersWall");
-        if (data.image.length > 0) {
+        if (data?.image?.length > 0) {
             formData.append("image", data.image[0]);
         }
         setIsLoading(true);
         try {
-            const res = await LukeApp.post(`offers/wall`, formData);
+            const res = await LukeApp.patch(`offers/wall/${id}`, formData);
             console.log(res);
             ToastMessage("success", res.data.message);
-            dispatch(addOffersWall(res.data.newOfferWall));
+            dispatch(editOffor({_id:id,data:res.data.result}));
         } catch (error) {
             console.log(error);
-            // ToastMessage("error", error.response.message);
+            ToastMessage("error", error.response.message);
         } finally {
             reset();
             setIsLoading(false);
@@ -70,9 +70,9 @@ function Edit_Offers() {
                     error={errors.title}
                     helperText={errors.title?.message}
                     {...register("title")}
-                    focused
                     defaultValue={offer?.title}
                     fullWidth
+                    focused
                     variant="outlined"
                     sx={{
                         mb: 3,
@@ -84,10 +84,10 @@ function Edit_Offers() {
                     error={errors.description}
                     helperText={errors.description?.message}
                     {...register("description")}
-                    focused
                     defaultValue={offer?.description}
                     variant="outlined"
                     fullWidth
+                    focused
                     sx={{
                         mb: 3,
                     }}
@@ -109,6 +109,7 @@ function Edit_Offers() {
                 <br />
                 <TextField
                     type="file"
+                    label='image'
                     variant="outlined"
                     fullWidth
                     focused
