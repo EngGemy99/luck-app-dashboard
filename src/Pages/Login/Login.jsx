@@ -8,7 +8,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate } from "react-router-dom";
 import { fetchUser } from "../../store/Slices/userSlice";
 import { useDispatch } from "react-redux";
-import  jwt_decode  from 'jwt-decode';
+import jwt_decode from "jwt-decode";
+import { ToastMessage } from "../../utils/ToastMessage";
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -29,11 +30,12 @@ function Login() {
       localStorage.setItem("token", data.token);
       const decodedToken = jwt_decode(data.token);
       dispatch(fetchUser(decodedToken.userId));
+      ToastMessage("success", data.message);
       navigate("/");
     } catch (error) {
-      console.log(error);
+      ToastMessage("success", error.response.data.error);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
