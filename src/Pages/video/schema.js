@@ -22,13 +22,16 @@ export const editSchema = yup
   .object({
     title: yup.string().min(3).optional(),
     description: yup.string().min(5).optional(),
-    image: yup.mixed().optional().test('fileType', 'Invalid file type', (value) => {
-      if (value && value !== null) {
-        const supportedTypes = ['image/jpeg', 'image/png'];
-        return supportedTypes.includes(value.type);
-      }
-      return true; // Pass validation if value is null or not provided
-    }),
+    image: yup
+      .mixed()
+      .optional()
+      .test("fileType", "Invalid file type", (value) => {
+        if (value && value !== null) {
+          const supportedTypes = ["image/jpeg", "image/png"];
+          return supportedTypes.includes(value.type);
+        }
+        return true; // Pass validation if value is null or not provided
+      }),
     url: yup
       .string()
       .matches(/^https?:\/\/.*$/, "URL must start with http or https")
