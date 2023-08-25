@@ -143,8 +143,9 @@ function Edit_Top_Offers() {
           sx={{
             color: "inherit",
           }}
+          disabled={isLoading}
         >
-          Edit Top Offer
+          {isLoading ? "Loading..." : "Edit Top Offer"}
         </Button>
       </form>
     </Paper>

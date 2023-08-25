@@ -333,6 +333,7 @@ function OffersWall() {
               {...register("url")}
               label="url"
               variant="outlined"
+              placeholder="https://your website.com/coins?api_key=api_key&pub_id=pub_idV&user_id= "
               fullWidth
               sx={{
                 mb: 3,

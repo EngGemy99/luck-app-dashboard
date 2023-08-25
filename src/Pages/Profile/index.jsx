@@ -14,7 +14,7 @@ import React, { useState } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import PropTypes from "prop-types";
-import { schema } from "./schema";
+import { schema, schemaChangePassword } from "./schema";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useSelector } from "react-redux";
@@ -24,6 +24,7 @@ import { useEffect } from "react";
 import { ToastMessage } from "../../utils/ToastMessage";
 function Profile() {
   const { user } = useSelector((state) => state.user);
+  const [isLoading, setIsLoading] = useState(false);
   function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
     return (
@@ -52,12 +53,22 @@ function Profile() {
     resolver: yupResolver(schema),
   });
 
+  const {
+    register: register2,
+    handleSubmit: handleSubmit2,
+    formState: { errors: errors2 },
+    reset: reset2,
+  } = useForm({
+    resolver: yupResolver(schemaChangePassword),
+  });
+
   useEffect(() => {
     reset({
       userName: user.userName,
     });
   }, [reset, user.userName]);
   const onSubmit = async (data) => {
+    setIsLoading(true);
     const { userName } = data;
     const formData = new FormData();
     if (user.userName != userName) {
@@ -66,8 +77,29 @@ function Profile() {
     if (imageFile) {
       formData.append("image", imageFile);
     }
-    const res = await LukeApp.patch(`admin/profile`, formData);
-    ToastMessage("success", res.data.message);
+    try {
+      const res = await LukeApp.patch(`admin/profile`, formData);
+      ToastMessage("success", res.data.message);
+    } catch (error) {
+      console.log(error);
+      // ToastMessage("error", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const onSubmit2 = async (data) => {
+    setIsLoading(true);
+    try {
+      const res = await LukeApp.patch(`/admin/change-password`, data);
+      ToastMessage("success", res.data.message);
+    } catch (error) {
+      console.log(error);
+      // ToastMessage("success", error);
+    } finally {
+      reset2();
+      setIsLoading(false);
+    }
   };
   CustomTabPanel.propTypes = {
     children: PropTypes.node,
@@ -81,7 +113,7 @@ function Profile() {
     };
   }
 
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -176,8 +208,13 @@ function Profile() {
                   mb: 3,
                 }}
               />
-              <Button variant="contained" color="primary" type="submit">
-                Change Details
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                disabled={isLoading}
+              >
+                {isLoading ? "Loading..." : "Change Details"}
               </Button>
             </form>
           </Paper>
@@ -188,31 +225,42 @@ function Profile() {
               p: 4,
             }}
           >
-            {/* <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit2(onSubmit2)}>
               <TextField
+                type="password"
+                error={errors2.password}
+                helperText={errors2.password?.message}
+                {...register2("password")}
                 label="new password"
                 fullWidth
                 variant="outlined"
-                onChange={(e) => setUsername(e.target.value)}
                 sx={{
                   mb: 3,
                 }}
               />
               <br />
               <TextField
+                type="password"
+                error={errors2.confirmPassword}
+                helperText={errors2.confirmPassword?.message}
+                {...register2("confirmPassword")}
                 label="confirm password"
                 variant="outlined"
                 fullWidth
-                onChange={(e) => setImage(e.target.value)}
                 sx={{
                   mb: 3,
                 }}
               />
               <br />
-              <Button variant="contained" color="primary" type="submit">
-                Change Password
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                disabled={isLoading}
+              >
+                {isLoading ? "Loading..." : "Change Password"}
               </Button>
-            </form> */}
+            </form>
           </Paper>
         </CustomTabPanel>
       </Grid>

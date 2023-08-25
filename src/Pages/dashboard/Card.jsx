@@ -16,7 +16,10 @@ const Card = ({ icon, title, subTitle, increase, data, scheme }) => {
     >
       <Stack gap={1}>
         {icon}
-        <Typography variant="body2" sx={{ fontSize: "13px" }}>
+        <Typography
+          variant="body2"
+          sx={{ fontSize: "20px", fontWeight: "bold" }}
+        >
           {title}
         </Typography>
         <Typography variant="body2" sx={{ fontSize: "13px" }}>

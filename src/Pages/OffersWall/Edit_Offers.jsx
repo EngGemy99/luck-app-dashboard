@@ -32,7 +32,6 @@ function Edit_Offers() {
     formData.append("title", data.title);
     formData.append("description", data.description);
     formData.append("url", data.url);
-    // formData.append("offerType", "offersWall");
     if (data?.image?.length > 0) {
       formData.append("image", data.image[0]);
     }
@@ -125,8 +124,9 @@ function Edit_Offers() {
           sx={{
             color: "inherit",
           }}
+          disabled={isLoading}
         >
-          Edit Offer Wall
+          {isLoading ? "Loading..." : " Edit Offer Wall"}
         </Button>
       </form>
     </Paper>

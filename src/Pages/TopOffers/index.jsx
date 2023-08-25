@@ -334,6 +334,7 @@ function TopOffers() {
               {...register("url")}
               label="url"
               variant="outlined"
+              placeholder="https://digitaltechnewyork.com/click/3797/?partid=71"
               fullWidth
               sx={{
                 mb: 3,

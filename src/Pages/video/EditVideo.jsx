@@ -124,7 +124,7 @@ function EditVideo() {
           }}
           disabled={isLoading}
         >
-          {isLoading ? "Loading..." : " edit Video"}
+          {isLoading ? "Loading..." : "Edit Video"}
         </Button>
       </form>
     </Paper>
